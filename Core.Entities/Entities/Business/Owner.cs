@@ -9,6 +9,7 @@ namespace PetShop.Core.Entities.Entities.Business
         public string Name { get; set; }
         public string Email { get; set; }
         public DateTime BirthDate { get; set; }
+        public ICollection<Pet> Pets { get; set; }
 
         public override string ToString()
         {

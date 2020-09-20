@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,7 +21,8 @@ using PetShop.Core.ApplicationService.Interfaces;
 using PetShop.Core.DomainService;
 using PetShop.Core.HelperClasses.Implementations;
 using PetShop.Core.HelperClasses.Interfaces;
-using PetShop.Infrastructure.Data;
+using PetShop.Infrastructure.Data.EF;
+using PetShop.Infrastructure.Data.EF.Repositories;
 
 namespace PetShop.RestAPI
 {
@@ -36,6 +38,7 @@ namespace PetShop.RestAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
             services.AddScoped<IPetRepository, PetRepository>();
             services.AddScoped<IPetService, PetService>();
             services.AddScoped<IOwnerRepository, OwnerRepository>();
@@ -50,6 +53,10 @@ namespace PetShop.RestAPI
                 o.SerializerSettings.MaxDepth = 5;
 
             });
+
+            services.AddDbContext<PetShopDBContext>(
+                opt => opt.UseInMemoryDatabase("ThaDB")
+            );
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -82,7 +89,7 @@ namespace PetShop.RestAPI
                     var petRepo = scope.ServiceProvider.GetService<IPetRepository>();
                     var ownerRepo = scope.ServiceProvider.GetService<IOwnerRepository>();
                     var petTypeRepo = scope.ServiceProvider.GetService<IPetTypeRepository>();
-                    new DataInitializer(petRepo, ownerRepo, petTypeRepo).InitData(); 
+                   // new DataInitializer(petRepo, ownerRepo, petTypeRepo).InitData(); 
                 }
             //}
             app.UseSwaggerUI(c =>
