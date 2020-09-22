@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using PetShop.Core.DomainService;
 using PetShop.Core.Entities.Entities.Business;
 using PetShop.Core.Entities.Entities.Filter;
 
-namespace PetShop.Infrastructure.Data.EF.Repositories
+namespace PetShop.Infrastructure.Data.EnitityFramework.Repositories
 {
     public class PetTypeRepository : IPetTypeRepository
     {

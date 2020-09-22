@@ -55,7 +55,7 @@ namespace PetShop.RestAPI
             });
 
             services.AddDbContext<PetShopDBContext>(
-                opt => opt.UseInMemoryDatabase("ThaDB")
+                opt => opt.UseSqlite("Data Source=PetShop.db")
             );
             services.AddSwaggerGen(c =>
             {
@@ -89,7 +89,11 @@ namespace PetShop.RestAPI
                     var petRepo = scope.ServiceProvider.GetService<IPetRepository>();
                     var ownerRepo = scope.ServiceProvider.GetService<IOwnerRepository>();
                     var petTypeRepo = scope.ServiceProvider.GetService<IPetTypeRepository>();
-                   // new DataInitializer(petRepo, ownerRepo, petTypeRepo).InitData(); 
+                    var context = scope.ServiceProvider.GetService<PetShopDBContext>();
+                    context.Database.EnsureDeleted();
+                    context.Database.EnsureCreated();
+
+                    // new DataInitializer(petRepo, ownerRepo, petTypeRepo).InitData(); 
                 }
             //}
             app.UseSwaggerUI(c =>

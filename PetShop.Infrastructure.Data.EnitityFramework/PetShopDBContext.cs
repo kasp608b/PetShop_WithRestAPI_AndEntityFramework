@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PetShop.Core.Entities.Entities.Business;
 
-namespace PetShop.Infrastructure.Data.EF
+namespace PetShop.Infrastructure.Data.EnitityFramework
 {
     public class PetShopDBContext : DbContext
     {
