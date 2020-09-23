@@ -7,6 +7,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.8" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
   </ItemGroup>
@@ -14,7 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Core.Entities\PetShop.Core.Entities.csproj" />
     <ProjectReference Include="..\Core\PetShop.Core.csproj" />
-    <ProjectReference Include="..\PetShop.Infrastructure.Data.EnitityFramework\PetShop.Infrastructure.Data.EnitityFramework.csproj" />
+    <ProjectReference Include="..\PetShop.Infrastructure.Data.EnitityFramework\PetShop.Infrastructure.Data.EntityFramework.csproj" />
   </ItemGroup>
 
 	<PropertyGroup>

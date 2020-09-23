@@ -1,12 +1,7 @@
 ﻿using PetShop.Core.DomainService;
-using PetShop.Core.Entities;
-using PetShop.Core.Entities.Entities;
-using PetShop.Core.HelperClasses.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
+using PetShop.Core.ApplicationService.Interfaces;
 using PetShop.Core.Entities.Entities.Business;
 using PetShop.Core.Entities.Entities.Filter;
 using PetShop.Core.Entities.Exceptions;
@@ -15,13 +10,15 @@ namespace PetShop.Core.ApplicationService.Implementations
 {
     public class PetService : IPetService
     {
-        private IPetRepository _petRepository;
-        private IParser _parser;
+        private readonly IPetRepository _petRepository;
+        private readonly IPetTypeRepository _petTypeRepository;
+        private readonly IOwnerRepository _ownerRepository;
 
-        public PetService(IPetRepository petRepository, IParser parser)
+        public PetService(IPetRepository petRepository, IPetTypeRepository petTypeRepository, IOwnerRepository ownerRepository)
         {
             _petRepository = petRepository;
-            _parser = parser;
+            _petTypeRepository = petTypeRepository;
+            _ownerRepository = ownerRepository;
         }
 
         public List<Pet> GetPets()
@@ -33,6 +30,8 @@ namespace PetShop.Core.ApplicationService.Implementations
         {
             Pet addedPet;
 
+           
+
             if(pet.Equals(null))
             {
                 throw new InvalidDataException("Pet cannot be null");
@@ -42,6 +41,31 @@ namespace PetShop.Core.ApplicationService.Implementations
             {
                 throw new InvalidDataException("Pet name has to be longer than one");
             }
+
+            if (pet.PetType != null)
+            {
+                var petType = _petTypeRepository.SearchById(pet.PetType.Id);
+                if (petType == null)
+                {
+                    throw new InvalidDataException("The petType has to be an existing petType in the database");
+                }
+
+            }
+            else
+            {
+                throw new InvalidDataException("New Pet has to have a petType");
+            }
+
+            if (pet.Owner != null)
+            {
+                var owner = _ownerRepository.SearchById(pet.Owner.Id);
+                if (owner == null)
+                {
+                    throw new InvalidDataException("The owner has to be an existing owner in the database");
+                }
+
+            }
+            
 
             addedPet = _petRepository.AddPet(pet);
             if (addedPet == null)
@@ -55,13 +79,13 @@ namespace PetShop.Core.ApplicationService.Implementations
         public Pet DeletePet(int id)
         {
            Pet petToDelete;
-           if(!_petRepository.GetAllPets().Exists(x => x.ID == id))
+           if(!_petRepository.GetAllPets().Exists(x => x.Id == id))
            {
                 throw new KeyNotFoundException("A pet with this ID does not exist");
            }
            else 
            {
-                petToDelete = _petRepository.GetAllPets().Find(x => x.ID == id);
+                petToDelete = _petRepository.GetAllPets().Find(x => x.Id == id);
                 return _petRepository.DeletePet(petToDelete);
            }
 
@@ -69,7 +93,7 @@ namespace PetShop.Core.ApplicationService.Implementations
 
         public Pet EditPet(int idOfPetToEdit, Pet editedPet)
         {
-            if (!_petRepository.GetAllPets().Exists(x => x.ID == idOfPetToEdit))
+            if (!_petRepository.GetAllPets().Exists(x => x.Id == idOfPetToEdit))
             {
                 throw new KeyNotFoundException("A pet with this ID does not exist");
             }
@@ -102,7 +126,7 @@ namespace PetShop.Core.ApplicationService.Implementations
 
         public Pet SearchById(int id)
         {
-            if (!_petRepository.GetAllPets().Exists(x => x.ID == id))
+            if (!_petRepository.GetAllPets().Exists(x => x.Id == id))
             {
                 throw new KeyNotFoundException("No pets with this id exist");
             }

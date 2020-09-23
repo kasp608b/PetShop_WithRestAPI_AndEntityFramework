@@ -1,13 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetShop.Core.Entities.Entities.Business;
 
-namespace PetShop.Infrastructure.Data.EnitityFramework
+namespace PetShop.Infrastructure.Data.EntityFramework
 {
-    public class PetShopDBContext : DbContext
+    public class PetShopDbContext : DbContext
     {
-        public PetShopDBContext(DbContextOptions<PetShopDBContext> opt) : base(opt) { }
+        public PetShopDbContext(DbContextOptions<PetShopDbContext> opt) : base(opt) { }
         public DbSet<Pet> Pets { get; set; }
         public DbSet<Owner> Owners { get; set; }
         public DbSet<PetType> PetTypes { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            
+        }
     }
 }

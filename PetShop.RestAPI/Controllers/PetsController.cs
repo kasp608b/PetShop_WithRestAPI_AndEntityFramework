@@ -1,16 +1,11 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PetShop.Core.ApplicationService;
 using PetShop.Core.ApplicationService.Interfaces;
-using PetShop.Core.Entities;
-using PetShop.Core.Entities.Entities;
 using PetShop.Core.Entities.Entities.Business;
-using PetShop.Core.Entities.Entities.DTO;
 using PetShop.Core.Entities.Entities.Filter;
 using PetShop.Core.Entities.Exceptions;
 
@@ -28,13 +23,9 @@ namespace PetShop.RestAPI.Controllers
     {
 
         private readonly IPetService _petService;
-        private readonly IPetTypeService _petTypeService;
-        private readonly IOwnerService _ownerService;
-        public PetsController(IPetService petService, IPetTypeService petTypeService, IOwnerService ownerService)
+        public PetsController(IPetService petService)
         {
             _petService = petService;
-            _petTypeService = petTypeService;
-            _ownerService = ownerService;
         }
 
 
@@ -74,38 +65,21 @@ namespace PetShop.RestAPI.Controllers
         }
 
         /// <summary>
-        /// Returns af petDTO based on given id
+        /// Returns af pet based on given id
         /// </summary>
         /// <param name="id"> An id of an existing pet, must be a valid int</param>
         /// <returns></returns>
-        /// <response code="200">Returns the requested pet in the form of a pet data transfer object which includes the petType and owner objects the pet i tied to</response>
+        /// <response code="200">Returns the requested pet which includes the petType and owner objects the pet i tied to</response>
         /// <response code="400">If the input is invalid</response>
         /// <response code="404">If the api could not find the requested pet</response>
         /// <response code="500">If something went from with the database</response> 
         [HttpGet("{id}")]
-        public ActionResult<PetDTO> GetPets(int id)
+        public ActionResult<Pet> GetPets(int id)
         {
-            Pet pet;
-            PetDTO petDTO;
-
+           
             try
             {
-                pet = _petService.SearchById(id);
-
-                if (pet.PreviousOwnerID != 0)
-                {
-                    petDTO = new PetDTO(pet.ID, pet.Name, _petTypeService.SearchById(pet.PetTypeID), pet.BirthDate, pet.SoldDate, pet.Color, _ownerService.SearchById(pet.PreviousOwnerID), pet.Price);
-                }
-                else if (pet.PreviousOwnerID == 0)
-                {
-                    petDTO = new PetDTO(pet.ID, pet.Name, _petTypeService.SearchById(pet.PetTypeID), pet.BirthDate, pet.SoldDate, pet.Color, null, pet.Price);
-                }
-                else
-                {
-                    throw new DataBaseException("Something went very wrong");
-                }
-
-                return Ok(petDTO);
+                return Ok(_petService.SearchById(id));
             }
             catch (InvalidDataException e)
             {
@@ -147,7 +121,7 @@ namespace PetShop.RestAPI.Controllers
         }
 
         /// <summary>
-        /// Edits a pet based on id and object given in Json from request body. 
+        /// Edits a pet based on Id and object given in Json from request body. 
         /// </summary>
         /// <param name="id">Id of pet to edit</param>
         /// <param name="pet">The edited pet</param>
@@ -156,7 +130,7 @@ namespace PetShop.RestAPI.Controllers
         /// <response code="400">If the input is invalid</response>
         /// <response code="404">If the api could not find the requested pet</response>
         /// <response code="500">If something went from with the database</response> 
-        [HttpPut("{id}")]
+        [HttpPut("{'Id}")]
         public ActionResult<Pet> EditPet(int id, [FromBody] Pet pet)
         {
             try

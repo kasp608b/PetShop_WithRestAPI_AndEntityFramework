@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using PetShop.Core.DomainService;
 using PetShop.Core.Entities.Entities.Business;
 using PetShop.Core.Entities.Entities.Filter;
 
-namespace PetShop.Infrastructure.Data.EnitityFramework.Repositories
+namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
 {
     public class PetRepository : IPetRepository
     {
-        private readonly PetShopDBContext _context;
-        public PetRepository(PetShopDBContext context)
+        private readonly PetShopDbContext _context;
+        public PetRepository(PetShopDbContext context)
         {
             _context = context;
         }
@@ -44,7 +45,7 @@ namespace PetShop.Infrastructure.Data.EnitityFramework.Repositories
                     case "PetType":
                         if (_context.PetTypes.ToList().Exists(petType => petType.Name.Contains(filter.SearchText)))
                         {
-                            filtering = filtering.Where(pet => pet.PetTypeID.Equals(_context.PetTypes.ToList().Find(petType => petType.Name.Equals(filter.SearchText)).ID));
+                            filtering = filtering.Where(pet => pet.PetType.Id.Equals(_context.PetTypes.ToList().Find(petType => petType.Name.Equals(filter.SearchText)).Id));
                         }
                         else
                         {
@@ -84,7 +85,7 @@ namespace PetShop.Infrastructure.Data.EnitityFramework.Repositories
                     case "PreviousOwner":
                         if (_context.Owners.ToList().Exists(owner => owner.Name.Contains(filter.SearchText)))
                         {
-                            filtering = filtering.Where(pet => pet.PreviousOwnerID.Equals(_context.Owners.ToList().Find(owner => owner.Name.Equals(filter.SearchText)).ID));
+                            filtering = filtering.Where(pet => pet.Owner.Id.Equals(_context.Owners.ToList().Find(owner => owner.Name.Equals(filter.SearchText)).Id));
                         }
                         else
                         {
@@ -130,6 +131,16 @@ namespace PetShop.Infrastructure.Data.EnitityFramework.Repositories
 
         public Pet AddPet(Pet petToAdd)
         {
+            if (petToAdd.PetType != null)
+            {
+                _context.Attach(petToAdd.PetType).State = EntityState.Unchanged;
+            }
+
+            if (petToAdd.Owner != null)
+            {
+                _context.Attach(petToAdd.Owner).State = EntityState.Unchanged;
+            }
+
             var addedPet =  _context.Pets.Add(petToAdd).Entity;
             _context.SaveChanges();
             return addedPet;
@@ -147,7 +158,10 @@ namespace PetShop.Infrastructure.Data.EnitityFramework.Repositories
 
         public Pet SearchById(int id)
         {
-            return _context.Pets.FirstOrDefault(pet => pet.ID == id);
+            return _context.Pets
+                .Include(pet => pet.Owner)
+                .Include(pet => pet.PetType )
+                .FirstOrDefault(pet => pet.Id == id);
         }
     }
 }

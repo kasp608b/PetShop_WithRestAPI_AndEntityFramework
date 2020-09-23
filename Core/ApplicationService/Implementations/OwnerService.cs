@@ -4,23 +4,19 @@ using System.IO;
 using System.Text;
 using PetShop.Core.ApplicationService.Interfaces;
 using PetShop.Core.DomainService;
-using PetShop.Core.Entities.Entities;
 using PetShop.Core.Entities.Entities.Business;
 using PetShop.Core.Entities.Entities.Filter;
 using PetShop.Core.Entities.Exceptions;
-using PetShop.Core.HelperClasses.Interfaces;
 
 namespace PetShop.Core.ApplicationService.Implementations
 {
     public class OwnerService : IOwnerService
     {
-        private IOwnerRepository _ownerRepository;
-        private IParser _parser;
+        private readonly IOwnerRepository _ownerRepository;
 
-        public OwnerService(IOwnerRepository ownerRepository, IParser parser)
+        public OwnerService(IOwnerRepository ownerRepository)
         {
             _ownerRepository = ownerRepository;
-            _parser = parser;
         }
 
 
@@ -69,20 +65,20 @@ namespace PetShop.Core.ApplicationService.Implementations
         public Owner DeleteOwner(int id)
         {
             Owner ownerToDelete;
-            if (!_ownerRepository.GetAllOwners().Exists(x => x.ID == id))
+            if (!_ownerRepository.GetAllOwners().Exists(x => x.Id == id))
             {
                 throw new KeyNotFoundException("An owner with this ID does not exist");
             }
             else
             {
-                ownerToDelete = _ownerRepository.GetAllOwners().Find(x => x.ID == id);
+                ownerToDelete = _ownerRepository.GetAllOwners().Find(x => x.Id == id);
                 return _ownerRepository.DeleteOwner(ownerToDelete);
             }
         }
 
         public Owner EditOwner(int idOfOwnerToEdit, Owner editedOwner)
         {
-            if (!_ownerRepository.GetAllOwners().Exists(x => x.ID == idOfOwnerToEdit))
+            if (!_ownerRepository.GetAllOwners().Exists(x => x.Id == idOfOwnerToEdit))
             {
                 throw new KeyNotFoundException("An owner with this ID does not exist");
             }
@@ -95,7 +91,7 @@ namespace PetShop.Core.ApplicationService.Implementations
         public Owner SearchById(int id)
         {
             
-            if (!_ownerRepository.GetAllOwners().Exists(x => x.ID == id))
+            if (!_ownerRepository.GetAllOwners().Exists(x => x.Id == id))
             {
                 throw new KeyNotFoundException("No owners with this id exist");
             }

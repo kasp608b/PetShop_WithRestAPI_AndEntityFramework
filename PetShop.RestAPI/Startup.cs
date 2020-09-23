@@ -21,8 +21,8 @@ using PetShop.Core.ApplicationService.Interfaces;
 using PetShop.Core.DomainService;
 using PetShop.Core.HelperClasses.Implementations;
 using PetShop.Core.HelperClasses.Interfaces;
-using PetShop.Infrastructure.Data.EnitityFramework;
-using PetShop.Infrastructure.Data.EnitityFramework.Repositories;
+using PetShop.Infrastructure.Data.EntityFramework;
+using PetShop.Infrastructure.Data.EntityFramework.Repositories;
 
 namespace PetShop.RestAPI
 {
@@ -54,7 +54,7 @@ namespace PetShop.RestAPI
 
             });
 
-            services.AddDbContext<PetShopDBContext>(
+            services.AddDbContext<PetShopDbContext>(
                 opt => opt.UseSqlite("Data Source=PetShop.db")
             );
             services.AddSwaggerGen(c =>
@@ -86,12 +86,15 @@ namespace PetShop.RestAPI
             app.UseDeveloperExceptionPage();
                 using (var scope = app.ApplicationServices.CreateScope())
                 {
-                    var petRepo = scope.ServiceProvider.GetService<IPetRepository>();
-                    var ownerRepo = scope.ServiceProvider.GetService<IOwnerRepository>();
-                    var petTypeRepo = scope.ServiceProvider.GetService<IPetTypeRepository>();
-                    var context = scope.ServiceProvider.GetService<PetShopDBContext>();
+                    var petService = scope.ServiceProvider.GetService<IPetService>();
+                    var ownerService = scope.ServiceProvider.GetService<IOwnerService>();
+                    var petTypeService = scope.ServiceProvider.GetService<IPetTypeService>();
+                    var context = scope.ServiceProvider.GetService<PetShopDbContext>();
+                    
                     context.Database.EnsureDeleted();
                     context.Database.EnsureCreated();
+                    DataInitializer dataInitializer = new DataInitializer(petService, ownerService, petTypeService);
+                    dataInitializer.InitData();
 
                     // new DataInitializer(petRepo, ownerRepo, petTypeRepo).InitData(); 
                 }

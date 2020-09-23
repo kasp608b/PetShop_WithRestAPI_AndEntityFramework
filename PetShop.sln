@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetShop.RestAPI", "PetShop.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RestAPI", "RestAPI", "{5A262386-C2C9-4894-BF28-94DB7365B6CB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetShop.Infrastructure.Data.EnitityFramework", "PetShop.Infrastructure.Data.EnitityFramework\PetShop.Infrastructure.Data.EnitityFramework.csproj", "{E1FD86B8-E4E2-4125-BF2C-881EB4C522C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetShop.Infrastructure.Data.EntityFramework", "PetShop.Infrastructure.Data.EnitityFramework\PetShop.Infrastructure.Data.EntityFramework.csproj", "{E1FD86B8-E4E2-4125-BF2C-881EB4C522C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
