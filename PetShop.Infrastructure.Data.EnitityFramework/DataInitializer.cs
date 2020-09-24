@@ -23,38 +23,52 @@ namespace PetShop.Infrastructure.Data.EntityFramework
         {
             List<Pet> pets;
 
+
             Owner owner1 = new Owner
             {
                 Name = "Harold",
                 BirthDate = DateTime.Now.AddYears(-40),
                 Email = "HaroldKork@gmail.uk"
             };
+
             Owner owner2 = new Owner
             {
                 Name = "Carry",
                 BirthDate = DateTime.Now.AddYears(-30),
                 Email = "KarryOckthorp@gmail.uk"
             };
+
             Owner owner3 = new Owner
             {
-                Name = "Tom",
-                BirthDate = DateTime.Now.AddYears(-25),
-                Email = "TomYork@gmail.uk"
+                  Name = "Tom",
+                  BirthDate = DateTime.Now.AddYears(-25),
+                  Email = "TomYork@gmail.uk"
             };
+
+            _ownerService.AddOwner(owner1);
+            _ownerService.AddOwner(owner2);
+            _ownerService.AddOwner(owner3);
+
 
 
             PetType petType1 = new PetType
-            {
-                Name = "Cat",
-            };
-            PetType petType2 = new PetType
-            {
-                Name = "Dog",
-            };
-            PetType petType3 = new PetType
-            {
-                Name = "Bird",
-            };
+              {
+                  Name = "Cat",
+              };
+
+              PetType petType2 = new PetType
+              {
+                  Name = "Dog",
+              };
+
+              PetType petType3 = new PetType
+              {
+                  Name = "Bird",
+              };
+
+              _petTypeService.AddPetType(petType1);
+              _petTypeService.AddPetType(petType2);
+              _petTypeService.AddPetType(petType3);
 
             pets = new List<Pet> {
                 new Pet
@@ -71,7 +85,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework
                 new Pet
                 {
                     Name = "Tom",
-                    PetType = petType2,
+                    PetType =  petType2,
                     BirthDate = DateTime.Now.AddYears(-22),
                     Color = "Red",
                     Owner = owner2,
@@ -81,7 +95,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework
                 new Pet
                 {
                     Name = "Cinc",
-                    PetType = petType3,
+                    PetType =  petType3,
                     BirthDate = DateTime.Now.AddYears(-1),
                     Color = "Purple",
                     Owner = owner3,

@@ -84,6 +84,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
         public PetType SearchById(int id)
         {
             return _context.PetTypes
+                .AsNoTracking()
                 .Include(petType => petType.Pets)
                 .FirstOrDefault(PetType => PetType.Id == id);
         }
