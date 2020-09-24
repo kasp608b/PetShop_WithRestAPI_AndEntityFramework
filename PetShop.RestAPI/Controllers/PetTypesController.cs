@@ -1,13 +1,10 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PetShop.Core.ApplicationService;
 using PetShop.Core.ApplicationService.Interfaces;
 using PetShop.Core.Entities.Entities.Business;
-using PetShop.Core.Entities.Entities.DTO;
 using PetShop.Core.Entities.Entities.Filter;
 using PetShop.Core.Entities.Exceptions;
 
@@ -24,11 +21,9 @@ namespace PetShop.RestAPI.Controllers
     public class PetTypesController : ControllerBase
     {
         private readonly IPetTypeService _petTypeService;
-        private readonly IPetService _petService;
-        public PetTypesController(IPetTypeService petTypeService, IPetService petService)
+        public PetTypesController(IPetTypeService petTypeService)
         {
             _petTypeService = petTypeService;
-            _petService = petService;
         }
 
 
@@ -63,36 +58,20 @@ namespace PetShop.RestAPI.Controllers
         }
 
         /// <summary>
-        /// Returns a PetTypeDTO based on given id
+        /// Returns a PetType based on given id
         /// </summary>
         /// <param name="id">Id of the requested petType</param>
         /// <returns></returns>
-        /// <response code="200">Returns the requested petType in the form of a petType data transfer object which includes the pets of that type</response>
+        /// <response code="200">Returns the requested petType which includes the pets of that type</response>
         /// <response code="400">If the input is invalid</response>
         /// <response code="404">If the api could not find the requested petType</response>
         /// <response code="500">If something went from with the database</response> 
         [HttpGet("{id}")]
-        public ActionResult<PetTypeDTO> GetPetTypes(int id)
+        public ActionResult<PetType> GetPetTypes(int id)
         {
-            PetType petType;
-            PetTypeDTO petTypeDTO;
-            List<Pet> pets;
-
             try
             {
-                petType = _petTypeService.SearchById(id);
-                if (_petService.GetPets().Exists(pet => pet.PetTypeID == petType.ID))
-                {
-                    pets = _petService.GetPets().FindAll(pet => pet.PetTypeID == petType.ID);
-                }
-                else
-                {
-                    pets = null;
-                }
-
-                petTypeDTO = new PetTypeDTO(petType.ID, petType.Name, pets);
-                
-                return Ok(petTypeDTO);
+                return Ok(_petTypeService.SearchById(id));
             }
             catch (InvalidDataException e)
             {

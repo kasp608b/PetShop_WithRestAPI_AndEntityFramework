@@ -12,12 +12,10 @@ namespace PetShop.Core.ApplicationService.Implementations
     public class PetTypeService : IPetTypeService
     {
         private IPetTypeRepository _petTypeRepository;
-        private IParser _parser;
 
-        public PetTypeService(IPetTypeRepository petTypeRepository, IParser parser)
+        public PetTypeService(IPetTypeRepository petTypeRepository)
         {
             _petTypeRepository = petTypeRepository;
-            _parser = parser;
         }
 
         public FilteredList<PetType> GetPetTypes(Filter filter)
@@ -65,20 +63,20 @@ namespace PetShop.Core.ApplicationService.Implementations
         public PetType DeletePetType(int id)
         {
             PetType petTypeToDelete;
-            if (!_petTypeRepository.GetAllPetTypes().Exists(x => x.ID == id))
+            if (!_petTypeRepository.GetAllPetTypes().Exists(x => x.Id == id))
             {
                 throw new KeyNotFoundException("A pet with this ID does not exist");
             }
             else
             {
-                petTypeToDelete = _petTypeRepository.GetAllPetTypes().Find(x => x.ID == id);
+                petTypeToDelete = _petTypeRepository.GetAllPetTypes().Find(x => x.Id == id);
                 return _petTypeRepository.DeletePetType(petTypeToDelete);
             }
         }
 
         public PetType EditPetType(int idOfPetTypeToEdit, PetType editedPetType)
         {
-            if (!_petTypeRepository.GetAllPetTypes().Exists(x => x.ID == idOfPetTypeToEdit))
+            if (!_petTypeRepository.GetAllPetTypes().Exists(x => x.Id == idOfPetTypeToEdit))
             {
                 throw new KeyNotFoundException("A pet with this ID does not exist");
             }
@@ -90,7 +88,7 @@ namespace PetShop.Core.ApplicationService.Implementations
 
         public PetType SearchById(int id)
         {
-            if (!_petTypeRepository.GetAllPetTypes().Exists(x => x.ID == id))
+            if (!_petTypeRepository.GetAllPetTypes().Exists(x => x.Id == id))
             {
                 throw new KeyNotFoundException("No pets with this id exist");
             }

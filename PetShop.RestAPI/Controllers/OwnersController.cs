@@ -1,14 +1,10 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PetShop.Core.ApplicationService;
 using PetShop.Core.ApplicationService.Interfaces;
-using PetShop.Core.Entities.Entities;
 using PetShop.Core.Entities.Entities.Business;
-using PetShop.Core.Entities.Entities.DTO;
 using PetShop.Core.Entities.Entities.Filter;
 using PetShop.Core.Entities.Exceptions;
 
@@ -25,11 +21,9 @@ namespace PetShop.RestAPI.Controllers
     public class OwnersController : ControllerBase
     {
         private readonly IOwnerService _ownerService;
-        private readonly IPetService _petService;
-        public OwnersController(IOwnerService ownerService, IPetService petService)
+        public OwnersController(IOwnerService ownerService)
         {
             _ownerService = ownerService;
-            _petService = petService;
         }
 
 
@@ -64,39 +58,21 @@ namespace PetShop.RestAPI.Controllers
         }
 
         /// <summary>
-        /// Return an ownerDTO based on given id. 
+        /// Return an owner based on given id. 
         /// </summary>
         /// <param name="id">Id of requested owner</param>
         /// <returns></returns>
-        /// <response code="200">Returns the requested owner in the form of a pet data transfer object which includes all the pets that the owner has.</response>
+        /// <response code="200">Returns the requested owner which includes all the pets that the owner has.</response>
         /// <response code="400">If the input is invalid</response>
         /// <response code="404">If the api could not find the requested owner</response>
         /// <response code="500">If something went from with the database</response> 
         [HttpGet("{id}")]
-        public ActionResult<OwnerDTO> GetOwners(int id)
+        public ActionResult<Owner> GetOwners(int id)
         {
-            Owner owner;
-            OwnerDTO ownerDTO;
-            List<Pet> pets;
 
             try
             {
-
-               owner = _ownerService.SearchById(id);
-
-               if (_petService.GetPets().Exists(pet => pet.PreviousOwnerID == owner.ID))
-               {
-                   pets = _petService.GetPets().FindAll(pet => pet.PreviousOwnerID == owner.ID);
-               }
-               else
-               {
-                   pets = null;
-               }
-
-               ownerDTO = new OwnerDTO(owner.ID, owner.Name, owner.Email, owner.BirthDate, pets);
-              
-
-               return Ok(ownerDTO);
+               return Ok(_ownerService.SearchById(id));
             }
             catch (InvalidDataException e)
             {
