@@ -83,11 +83,10 @@ namespace PetShop.Core.ApplicationService.Implementations
            {
                 throw new KeyNotFoundException("A pet with this ID does not exist");
            }
-           else 
-           {
-                petToDelete = _petRepository.GetAllPets().Find(x => x.Id == id);
-                return _petRepository.DeletePet(petToDelete);
-           }
+
+           petToDelete = _petRepository.GetAllPets().Find(x => x.Id == id);
+           return _petRepository.DeletePet(petToDelete);
+           
 
         }
 
@@ -97,11 +96,51 @@ namespace PetShop.Core.ApplicationService.Implementations
             {
                 throw new KeyNotFoundException("A pet with this ID does not exist");
             }
+
+            if (editedPet.Equals(null))
+            {
+                throw new InvalidDataException("Pet cannot be null");
+            }
+
+            if (editedPet.Name.Length < 1)
+            {
+                throw new InvalidDataException("Pet name has to be longer than one");
+            }
+
+            if (editedPet.PetType != null)
+            {
+                var petType = _petTypeRepository.SearchById(editedPet.PetType.Id);
+                if (petType == null)
+                {
+                    throw new InvalidDataException("The petType has to be an existing petType in the database");
+                }
+
+            }
             else
             {
-                return _petRepository.EditPet(idOfPetToEdit, editedPet);
+                throw new InvalidDataException("New Pet has to have a petType");
             }
-            
+
+            if (editedPet.Owner != null)
+            {
+                var owner = _ownerRepository.SearchById(editedPet.Owner.Id);
+                if (owner == null)
+                {
+                    throw new InvalidDataException("The owner has to be an existing owner in the database");
+                }
+
+            }
+
+            var succesfullyEditedPet = _petRepository.EditPet(idOfPetToEdit, editedPet);
+
+            if (succesfullyEditedPet == null)
+            {
+                throw new DataBaseException("Something went wrong in the database");
+            }
+
+            return succesfullyEditedPet;
+
+
         }
 
         public FilteredList<Pet> GetPets(Filter filter)

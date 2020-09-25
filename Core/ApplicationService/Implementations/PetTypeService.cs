@@ -51,6 +51,14 @@ namespace PetShop.Core.ApplicationService.Implementations
                 throw new InvalidDataException("Pet name has to be longer than one");
             }
 
+            if (petType.Pets != null)
+            {
+                if (petType.Pets.Count < 0)
+                {
+                    throw new InvalidDataException("You cant add pets to a petType like this, go ad an owner id to a pet instead");
+                }
+            }
+
             addedPetType = _petTypeRepository.AddPetType(petType);
             if (addedPetType == null)
             {
@@ -80,10 +88,17 @@ namespace PetShop.Core.ApplicationService.Implementations
             {
                 throw new KeyNotFoundException("A pet with this ID does not exist");
             }
-            else
+
+            if (editedPetType.Pets != null)
             {
-                return _petTypeRepository.EditPetType(idOfPetTypeToEdit, editedPetType);
+                if (editedPetType.Pets.Count < 0)
+                {
+                    throw new InvalidDataException("You cant add pets to a petType like this, go ad an owner id to a pet instead");
+                }
             }
+
+            return _petTypeRepository.EditPetType(idOfPetTypeToEdit, editedPetType);
+            
         }
 
         public PetType SearchById(int id)

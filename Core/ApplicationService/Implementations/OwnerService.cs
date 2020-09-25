@@ -53,6 +53,14 @@ namespace PetShop.Core.ApplicationService.Implementations
                 throw new InvalidDataException("Owner name has to be longer than one");
             }
 
+            if (owner.Pets != null)
+            {
+                if (owner.Pets.Count < 0)
+                {
+                    throw new InvalidDataException("You cant add pets to an owner like this, go ad an owner id to a pet instead");
+                }
+            }
+
             addedOwner = _ownerRepository.AddOwner(owner);
             if (addedOwner == null)
             {
@@ -82,10 +90,17 @@ namespace PetShop.Core.ApplicationService.Implementations
             {
                 throw new KeyNotFoundException("An owner with this ID does not exist");
             }
-            else
+
+            if (editedOwner.Pets != null)
             {
-                return _ownerRepository.EditOwner(idOfOwnerToEdit, editedOwner);
+                if (editedOwner.Pets.Count < 0)
+                {
+                    throw new InvalidDataException("You cant add pets to an owner like this, go ad an owner id to a pet instead");
+                }
             }
+
+            return _ownerRepository.EditOwner(idOfOwnerToEdit, editedOwner);
+            
         }
 
         public Owner SearchById(int id)

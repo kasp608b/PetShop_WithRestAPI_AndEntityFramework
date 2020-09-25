@@ -101,6 +101,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
         public Owner SearchById(int id)
         {
             return _context.Owners
+                .AsNoTracking()
                 .Include(pet => pet.Pets)
                 .FirstOrDefault(pet => pet.Id == id);
         }

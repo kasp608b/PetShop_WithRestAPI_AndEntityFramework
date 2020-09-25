@@ -148,17 +148,31 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
 
         public Pet DeletePet(Pet petToDelete)
         {
-            throw new NotImplementedException();
+            var deletedPet = _context.Pets.Remove(petToDelete).Entity;
+            _context.SaveChanges();
+            return deletedPet;
         }
 
         public Pet EditPet(int id, Pet editedPet)
         {
-            throw new NotImplementedException();
+            if (editedPet.PetType != null)
+            {
+                _context.Attach(editedPet.PetType).State = EntityState.Unchanged;
+            }
+
+            if (editedPet.Owner != null)
+            {
+                _context.Attach(editedPet.Owner).State = EntityState.Unchanged;
+            }
+
+            var successfullyEditedPet = _context.Pets.Update(editedPet).Entity;
+            return successfullyEditedPet;
         }
 
         public Pet SearchById(int id)
         {
             return _context.Pets
+                .AsNoTracking()
                 .Include(pet => pet.Owner)
                 .Include(pet => pet.PetType )
                 .FirstOrDefault(pet => pet.Id == id);
