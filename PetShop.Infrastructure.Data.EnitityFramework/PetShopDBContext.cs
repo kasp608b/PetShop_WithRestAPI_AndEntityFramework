@@ -12,7 +12,15 @@ namespace PetShop.Infrastructure.Data.EntityFramework
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            modelBuilder.Entity<Pet>()
+                .HasOne(pet => pet.Owner)
+                .WithMany(owner => owner.Pets)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Pet>()
+                .HasOne(pet => pet.PetType)
+                .WithMany(petType => petType.Pets)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

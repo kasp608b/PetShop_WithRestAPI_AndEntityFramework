@@ -17,5 +17,7 @@ namespace PetShop.Core.DomainService
         public PetType EditPetType(int id, PetType editedPetType);
 
         public PetType SearchById(int id);
+        public PetType SearchByIdWithoutRelations(int id);
+
     }
 }

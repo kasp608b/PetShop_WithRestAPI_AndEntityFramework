@@ -130,9 +130,15 @@ namespace PetShop.RestAPI.Controllers
         /// <response code="400">If the input is invalid</response>
         /// <response code="404">If the api could not find the requested pet</response>
         /// <response code="500">If something went from with the database</response> 
-        [HttpPut("{'Id}")]
+        [HttpPut("{id}")]
         public ActionResult<Pet> EditPet(int id, [FromBody] Pet pet)
         {
+
+            if (id < 1 || id != pet.Id)
+            {
+                return BadRequest("Parameter Id and order Id must be the same");
+            }
+
             try
             {
                 return Ok(_petService.EditPet(id, pet));

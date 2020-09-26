@@ -66,6 +66,8 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
 
         public PetType AddPetType(PetType petTypeToAdd)
         {
+            var changeTracker = _context.ChangeTracker.Entries<PetType>();
+
             var addedPetType = _context.PetTypes.Add(petTypeToAdd).Entity;
             _context.SaveChanges();
             return addedPetType;
@@ -73,7 +75,9 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
 
         public PetType DeletePetType(PetType petTypeToDelete)
         {
-            throw new NotImplementedException();
+            var deletedPeType = _context.Remove(petTypeToDelete).Entity;
+            _context.SaveChanges();
+            return deletedPeType;
         }
 
         public PetType EditPetType(int id, PetType editedPetType)
@@ -83,10 +87,19 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
 
         public PetType SearchById(int id)
         {
+            var changeTracker = _context.ChangeTracker.Entries<PetType>();
+
             return _context.PetTypes
-                .AsNoTracking()
                 .Include(petType => petType.Pets)
-                .FirstOrDefault(PetType => PetType.Id == id);
+                .FirstOrDefault(petType => petType.Id == id);
+        }
+
+        public PetType SearchByIdWithoutRelations(int id)
+        {
+            var changeTracker = _context.ChangeTracker.Entries<PetType>();
+
+            return _context.PetTypes
+                .FirstOrDefault(petType => petType.Id == id);
         }
     }
 }

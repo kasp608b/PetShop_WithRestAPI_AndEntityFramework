@@ -19,7 +19,7 @@ namespace PetShop.Core.ApplicationService
 
         public Pet DeletePet(int id);
 
-        public Pet EditPet(int idOfPetToEdit, Pet editedPet);
+        public Pet EditPet(int id, Pet editedPet);
 
         public Pet SearchById(int id);
     }
