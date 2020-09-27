@@ -126,6 +126,11 @@ namespace PetShop.RestAPI.Controllers
         [HttpPut("{id}")]
         public ActionResult<Owner> EditOwner(int id, [FromBody] Owner owner)
         {
+            if (id < 1 || id != owner.Id)
+            {
+                return BadRequest("Parameter Id and owner Id must be the same");
+            }
+
             try
             {
                 return Ok(_ownerService.EditOwner(id, owner));

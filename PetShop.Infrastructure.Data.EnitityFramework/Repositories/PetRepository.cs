@@ -131,25 +131,25 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
 
         public Pet AddPet(Pet petToAdd)
         {
-            var petTypeChangeTracker = _context.ChangeTracker.Entries<PetType>();
+            //var petTypeChangeTracker = _context.ChangeTracker.Entries<PetType>();
 
-            if (petToAdd.PetType != null && _context.ChangeTracker.Entries<PetType>()
-                .FirstOrDefault(petTypeEntry => petTypeEntry.Entity.Id == petToAdd.PetType.Id) == null)
-            {
-                _context.Attach(petToAdd.PetType);
-            }
+            //if (petToAdd.PetType != null && _context.ChangeTracker.Entries<PetType>()
+            //    .FirstOrDefault(petTypeEntry => petTypeEntry.Entity.Id == petToAdd.PetType.Id) == null)
+            //{
+            //    _context.Attach(petToAdd.PetType);
+            //}
 
-            var petOwnerChangeTracker = _context.ChangeTracker.Entries<Owner>();
+            //var petOwnerChangeTracker = _context.ChangeTracker.Entries<Owner>();
 
-            if (petToAdd.Owner != null && _context.ChangeTracker.Entries<Owner>()
-                .FirstOrDefault(ownerEntry =>ownerEntry.Entity.Id == petToAdd.Owner.Id) == null)
-            {
-                _context.Attach(petToAdd.Owner);
-            }
+            //if (petToAdd.Owner != null && _context.ChangeTracker.Entries<Owner>()
+            //    .FirstOrDefault(ownerEntry =>ownerEntry.Entity.Id == petToAdd.Owner.Id) == null)
+            //{
+            //    _context.Attach(petToAdd.Owner);
+            //}
 
-            var addedPet =  _context.Pets.Add(petToAdd).Entity;
+            _context.Attach(petToAdd).State = EntityState.Added;
             _context.SaveChanges();
-            return addedPet;
+            return petToAdd;
         }
 
         public Pet DeletePet(Pet petToDelete)
@@ -161,26 +161,36 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
 
         public Pet EditPet(int id, Pet editedPet)
         {
-            var petTypeChangeTracker = _context.ChangeTracker.Entries<PetType>();
-            var ChangeTracker = _context.ChangeTracker.Entries<Pet>();
+            //var petTypeChangeTracker = _context.ChangeTracker.Entries<PetType>();
+            //var ChangeTracker = _context.ChangeTracker.Entries<Pet>();
             
-            if (editedPet.PetType != null && _context.ChangeTracker.Entries<PetType>()
-                .FirstOrDefault(petTypeEntry => petTypeEntry.Entity.Id == editedPet.PetType.Id) == null)
-            {
-                _context.Attach(editedPet.PetType);
-            }
+            //if (editedPet.PetType != null && _context.ChangeTracker.Entries<PetType>()
+            //    .FirstOrDefault(petTypeEntry => petTypeEntry.Entity.Id == editedPet.PetType.Id) == null)
+            //{
+            //    _context.Attach(editedPet.PetType);
+            //}
+            //else
+            //{
+            //    _context.Entry(editedPet).Reference(pet => pet.PetType).IsModified = true;
+            //}
 
-            var petOwnerChangeTracker = _context.ChangeTracker.Entries<Owner>();
+            //var petOwnerChangeTracker = _context.ChangeTracker.Entries<Owner>();
 
-            if (editedPet.Owner != null && _context.ChangeTracker.Entries<Owner>()
-                .FirstOrDefault(ownerEntry => ownerEntry.Entity.Id == editedPet.Owner.Id) == null)
-            {
-                _context.Attach(editedPet.Owner);
-            }
+            //if (editedPet.Owner != null && _context.ChangeTracker.Entries<Owner>()
+            //    .FirstOrDefault(ownerEntry => ownerEntry.Entity.Id == editedPet.Owner.Id) == null)
+            //{
+            //    _context.Attach(editedPet.Owner);
+            //}
+            //else
+            //{
+            //    _context.Entry(editedPet).Reference(pet => pet.Owner).IsModified = true;
+            //}
 
-            var successfullyEditedPet = _context.Pets.Update(editedPet).Entity;
+            _context.Attach(editedPet).State = EntityState.Modified;
+            _context.Entry(editedPet).Reference(pet => pet.PetType).IsModified = true;
+            _context.Entry(editedPet).Reference(pet => pet.Owner).IsModified = true;
             _context.SaveChanges();
-            return successfullyEditedPet;
+            return editedPet;
         }
 
         public Pet SearchById(int id)
@@ -188,6 +198,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
             var changeTracker = _context.ChangeTracker.Entries<Pet>();
 
             return _context.Pets
+                .AsNoTracking()
                 .Include(pet => pet.Owner)
                 .Include(pet => pet.PetType)
                 .FirstOrDefault(pet => pet.Id == id);
@@ -198,6 +209,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
             var changeTracker = _context.ChangeTracker.Entries<Pet>();
 
             return _context.Pets
+                .AsNoTracking()
                 .FirstOrDefault(pet => pet.Id == id);
         }
     }

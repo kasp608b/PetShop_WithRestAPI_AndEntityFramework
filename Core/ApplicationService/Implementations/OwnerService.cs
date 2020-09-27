@@ -53,6 +53,12 @@ namespace PetShop.Core.ApplicationService.Implementations
                 throw new InvalidDataException("Owner name has to be longer than one");
             }
 
+
+            if (owner.Id != 0)
+            {
+                throw new InvalidDataException("A new owner cannot have an id, that is only for already existing pets");
+            }
+
             if (owner.Pets != null)
             {
                 if (owner.Pets.Count < 0)
@@ -86,7 +92,7 @@ namespace PetShop.Core.ApplicationService.Implementations
 
         public Owner EditOwner(int idOfOwnerToEdit, Owner editedOwner)
         {
-            if (!_ownerRepository.GetAllOwners().Exists(x => x.Id == idOfOwnerToEdit))
+            if (_ownerRepository.SearchById(editedOwner.Id) == null)
             {
                 throw new KeyNotFoundException("An owner with this ID does not exist");
             }

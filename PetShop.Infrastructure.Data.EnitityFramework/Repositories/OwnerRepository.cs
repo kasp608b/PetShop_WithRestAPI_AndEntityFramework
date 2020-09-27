@@ -85,9 +85,9 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
         {
             var changeTracker = _context.ChangeTracker.Entries<Owner>();
 
-            var addedOwner = _context.Owners.Add(ownerToAdd).Entity;
+            _context.Attach(ownerToAdd).State = EntityState.Added;
             _context.SaveChanges();
-            return addedOwner;
+            return ownerToAdd;
         }
 
         public Owner DeleteOwner(Owner ownerToDelete)
@@ -99,7 +99,9 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
 
         public Owner EditOwner(int id, Owner editedOwner)
         {
-            throw new NotImplementedException();
+            _context.Attach(editedOwner).State = EntityState.Modified;
+            _context.SaveChanges();
+            return editedOwner;
         }
 
         public Owner SearchById(int id)
@@ -107,6 +109,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
             var changeTracker = _context.ChangeTracker.Entries<Owner>();
 
             return _context.Owners
+                .AsNoTracking()
                 .Include(owner => owner.Pets)
                 .FirstOrDefault(owner => owner.Id == id);
         }
@@ -116,6 +119,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
             var changeTracker = _context.ChangeTracker.Entries<Owner>();
 
             return _context.Owners
+                .AsNoTracking()
                 .FirstOrDefault(owner => owner.Id == id);
         }
     }

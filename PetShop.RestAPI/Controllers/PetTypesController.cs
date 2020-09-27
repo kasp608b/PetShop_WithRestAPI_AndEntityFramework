@@ -125,6 +125,12 @@ namespace PetShop.RestAPI.Controllers
         [HttpPut("{id}")]
         public ActionResult<PetType> EditPetType(int id, [FromBody] PetType petType)
         {
+
+            if (id < 1 || id != petType.Id)
+            {
+                return BadRequest("Parameter Id and petType Id must be the same");
+            }
+
             try
             {
                 return Ok(_petTypeService.EditPetType(id, petType));

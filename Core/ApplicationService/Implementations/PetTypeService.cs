@@ -51,6 +51,11 @@ namespace PetShop.Core.ApplicationService.Implementations
                 throw new InvalidDataException("Pet name has to be longer than one");
             }
 
+            if (petType.Id != 0)
+            {
+                throw new InvalidDataException("A new petType cannot have an id, that is only for already existing pets");
+            }
+
             if (petType.Pets != null)
             {
                 if (petType.Pets.Count < 0)
@@ -84,9 +89,9 @@ namespace PetShop.Core.ApplicationService.Implementations
 
         public PetType EditPetType(int idOfPetTypeToEdit, PetType editedPetType)
         {
-            if (!_petTypeRepository.GetAllPetTypes().Exists(x => x.Id == idOfPetTypeToEdit))
+            if (_petTypeRepository.SearchById(editedPetType.Id) == null)
             {
-                throw new KeyNotFoundException("A pet with this ID does not exist");
+                throw new KeyNotFoundException("An petType with this ID does not exist");
             }
 
             if (editedPetType.Pets != null)

@@ -98,7 +98,7 @@ namespace PetShop.RestAPI.Controllers
         /// <summary>
         /// Adds a pet to the database based on object given in Json from request body.
         /// </summary>
-        /// <param name="pet">The pet to be added</param>
+        /// <param name="pet">The pet to be added, it must not have an id. Id is only for object that already exist in the database</param>
         /// <returns></returns>
         /// <response code="200">Returns the added pet</response>
         /// <response code="400">If the input is invalid</response>
@@ -136,7 +136,7 @@ namespace PetShop.RestAPI.Controllers
 
             if (id < 1 || id != pet.Id)
             {
-                return BadRequest("Parameter Id and order Id must be the same");
+                return BadRequest("Parameter Id and pet Id must be the same");
             }
 
             try
