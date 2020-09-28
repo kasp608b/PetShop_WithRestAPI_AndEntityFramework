@@ -29,6 +29,16 @@ namespace PetShop.Core.ApplicationService.Implementations
                 filter.SearchField = "Name";
             }
 
+            if (filter.CurrentPage < 0 || filter.ItemsPrPage < 0)
+            {
+                throw new InvalidDataException("CurrentPage and ItemsPrPage must be zero or more");
+            }
+
+            if ((filter.CurrentPage - 1 * filter.ItemsPrPage) >= _ownerRepository.GetAllOwners().Count)
+            {
+                throw new InvalidDataException("Index out of bounds, CurrentPage is to high");
+            }
+
             filteredOwners = _ownerRepository.GetAllOwnersFiltered(filter);
 
             if (filteredOwners.List.Count < 1)
@@ -36,7 +46,7 @@ namespace PetShop.Core.ApplicationService.Implementations
                 throw new KeyNotFoundException("Could not find owners that satisfy the filter");
             }
 
-            return _ownerRepository.GetAllOwnersFiltered(filter);
+            return filteredOwners;
         }
 
         public Owner AddOwner(Owner owner)

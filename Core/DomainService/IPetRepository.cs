@@ -21,8 +21,10 @@ namespace PetShop.Core.DomainService
         public Pet EditPet(int id, Pet editedPet);
 
         public Pet SearchById(int id);
+
         public Pet SearchByIdWithoutRelations(int id);
 
+        public int Count();
     }
 
 }

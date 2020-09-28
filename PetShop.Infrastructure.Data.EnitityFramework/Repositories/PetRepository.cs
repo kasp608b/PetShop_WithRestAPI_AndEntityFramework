@@ -29,10 +29,22 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
             Double searchDouble;
             var filteredList = new FilteredList<Pet>();
 
-            filteredList.TotalCount = GetAllPets().Count;
+            filteredList.TotalCount = Count();
             filteredList.FilterUsed = filter;
 
-            IEnumerable<Pet> filtering = GetAllPets();
+            if (filter.CurrentPage == 0)
+            {
+                filter.CurrentPage = 1;
+            }
+
+            if (filter.ItemsPrPage == 0)
+            {
+                filter.ItemsPrPage = 10;
+            }
+
+            IEnumerable<Pet> filtering = _context.Pets
+                .Skip((filter.CurrentPage - 1) * filter.ItemsPrPage)
+                .Take(filter.ItemsPrPage);
 
             if (!string.IsNullOrEmpty(filter.SearchText))
             {
@@ -211,6 +223,11 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
             return _context.Pets
                 .AsNoTracking()
                 .FirstOrDefault(pet => pet.Id == id);
+        }
+
+        public int Count()
+        {
+            return _context.Pets.Count();
         }
     }
 }

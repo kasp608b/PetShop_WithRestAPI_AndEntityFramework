@@ -27,6 +27,16 @@ namespace PetShop.Core.ApplicationService.Implementations
                 filter.SearchField = "Name";
             }
 
+            if (filter.CurrentPage < 0 || filter.ItemsPrPage < 0)
+            {
+                throw new InvalidDataException("CurrentPage and ItemsPrPage must be zero or more");
+            }
+
+            if ((filter.CurrentPage - 1 * filter.ItemsPrPage) >= _petTypeRepository.GetAllPetTypes().Count)
+            {
+                throw new InvalidDataException("Index out of bounds, CurrentPage is to high");
+            }
+
             filteredPetTypes = _petTypeRepository.GetAllPetTypesFiltered(filter);
 
             if (filteredPetTypes.List.Count < 1)
@@ -34,7 +44,7 @@ namespace PetShop.Core.ApplicationService.Implementations
                 throw new KeyNotFoundException("Could not find petTypes that satisfy the filter");
             }
 
-            return _petTypeRepository.GetAllPetTypesFiltered(filter);
+            return filteredPetTypes;
         }
 
         public PetType AddPetType(PetType petType)

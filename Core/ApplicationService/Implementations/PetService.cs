@@ -213,6 +213,16 @@ namespace PetShop.Core.ApplicationService.Implementations
                 filter.SearchField = "Name";
             }
 
+            if (filter.CurrentPage < 0 || filter.ItemsPrPage < 0)
+            {
+                throw new InvalidDataException("CurrentPage and ItemsPrPage must be zero or more");
+            }
+
+            if ((filter.CurrentPage - 1 * filter.ItemsPrPage) >= _petRepository.GetAllPets().Count)
+            {
+                throw new InvalidDataException("Index out of bounds, CurrentPage is to high");
+            }
+
             filteredPets = _petRepository.GetAllPetsFiltered(filter);
 
             if (filteredPets.List.Count < 1)
@@ -220,7 +230,7 @@ namespace PetShop.Core.ApplicationService.Implementations
                 throw new KeyNotFoundException("Could not find pets that satisfy the filter");
             }
 
-            return _petRepository.GetAllPetsFiltered(filter);
+            return filteredPets;
         }
 
 
