@@ -38,9 +38,13 @@ namespace PetShop.RestAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options => options.AddPolicy("AllowEverything", builder => builder.AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader()));
+            services.AddCors(options => options.AddDefaultPolicy(
+                builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+
+                })
+            );
             
             services.AddScoped<IPetRepository, PetRepository>();
             services.AddScoped<IPetService, PetService>();
@@ -110,11 +114,12 @@ namespace PetShop.RestAPI
 
             });
 
-            app.UseCors("AllowEverything");
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthorization();
 
