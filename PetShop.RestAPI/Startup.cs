@@ -62,8 +62,10 @@ namespace PetShop.RestAPI
             });
 
             services.AddDbContext<PetShopDbContext>(
-                opt => opt.UseSqlite("Data Source=PetShop.db")
-            );
+                opt =>
+                {
+                    opt.UseSqlite("Data Source=PetShop.db");
+                }, ServiceLifetime.Transient);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -93,14 +95,14 @@ namespace PetShop.RestAPI
             app.UseDeveloperExceptionPage();
                 using (var scope = app.ApplicationServices.CreateScope())
                 {
-                    var petService = scope.ServiceProvider.GetService<IPetService>();
-                    var ownerService = scope.ServiceProvider.GetService<IOwnerService>();
-                    var petTypeService = scope.ServiceProvider.GetService<IPetTypeService>();
+                    var petRepo = scope.ServiceProvider.GetService<IPetRepository>();
+                    var ownerRepo = scope.ServiceProvider.GetService<IOwnerRepository>();
+                    var petTypeRepo = scope.ServiceProvider.GetService<IPetTypeRepository>();
                     var context = scope.ServiceProvider.GetService<PetShopDbContext>();
                     
                     context.Database.EnsureDeleted();
                     context.Database.EnsureCreated();
-                    DataInitializer dataInitializer = new DataInitializer(petService, ownerService, petTypeService);
+                    DataInitializer dataInitializer = new DataInitializer(petRepo, petTypeRepo, ownerRepo);
                     dataInitializer.InitData();
 
                     // new DataInitializer(petRepo, ownerRepo, petTypeRepo).InitData(); 

@@ -2,21 +2,22 @@
 using System.Collections.Generic;
 using PetShop.Core.ApplicationService;
 using PetShop.Core.ApplicationService.Interfaces;
+using PetShop.Core.DomainService;
 using PetShop.Core.Entities.Entities.Business;
 
 namespace PetShop.Infrastructure.Data.EntityFramework
 {
     public class DataInitializer
     {
-        private readonly IPetService _petService;
-        private readonly IOwnerService _ownerService;
-        private readonly IPetTypeService _petTypeService;
+        private readonly IPetRepository _petRepository;
+        private readonly IPetTypeRepository _petTypeRepository;
+        private readonly IOwnerRepository _ownerRepository;
 
-        public DataInitializer(IPetService petService, IOwnerService ownerService, IPetTypeService petTypeService)
+        public DataInitializer(IPetRepository petRepository, IPetTypeRepository petTypeRepository, IOwnerRepository ownerRepository)
         {
-            _petService = petService;
-            _ownerService = ownerService;
-            _petTypeService = petTypeService;
+            _petRepository = petRepository;
+            _petTypeRepository = petTypeRepository;
+            _ownerRepository = ownerRepository;
         }
 
         public void InitData()
@@ -45,9 +46,9 @@ namespace PetShop.Infrastructure.Data.EntityFramework
                   Email = "TomYork@gmail.uk"
             };
 
-            _ownerService.AddOwner(owner1);
-            _ownerService.AddOwner(owner2);
-            _ownerService.AddOwner(owner3);
+            _ownerRepository.AddOwner(owner1);
+            _ownerRepository.AddOwner(owner2);
+            _ownerRepository.AddOwner(owner3);
 
 
 
@@ -66,9 +67,9 @@ namespace PetShop.Infrastructure.Data.EntityFramework
                   Name = "Bird",
               };
 
-              _petTypeService.AddPetType(petType1);
-              _petTypeService.AddPetType(petType2);
-              _petTypeService.AddPetType(petType3);
+              _petTypeRepository.AddPetType(petType1);
+              _petTypeRepository.AddPetType(petType2);
+              _petTypeRepository.AddPetType(petType3);
 
             pets = new List<Pet> {
                 new Pet
@@ -106,7 +107,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework
 
             foreach (Pet pet in pets)
             {
-                _petService.AddPet(pet);
+                _petRepository.AddPet(pet);
             }
 
 

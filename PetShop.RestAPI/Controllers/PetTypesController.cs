@@ -60,7 +60,7 @@ namespace PetShop.RestAPI.Controllers
         /// <summary>
         /// Returns a PetType based on given id
         /// </summary>
-        /// <param name="id">Id of the requested petType</param>
+        /// <param name="id">OwnerId of the requested petType</param>
         /// <returns></returns>
         /// <response code="200">Returns the requested petType which includes the pets of that type</response>
         /// <response code="400">If the input is invalid</response>
@@ -115,7 +115,7 @@ namespace PetShop.RestAPI.Controllers
         /// <summary>
         /// Edits a petType based on given id and object given in Json from request body.
         /// </summary>
-        /// <param name="id">Id of petType to be edited</param>
+        /// <param name="id">OwnerId of petType to be edited</param>
         /// <param name="petType">Edited petType</param>
         /// <returns></returns>
         /// <response code="200">Returns the successfully edited petType</response>
@@ -126,9 +126,9 @@ namespace PetShop.RestAPI.Controllers
         public ActionResult<PetType> EditPetType(int id, [FromBody] PetType petType)
         {
 
-            if (id < 1 || id != petType.Id)
+            if (id < 1 || id != petType.PetTypeId)
             {
-                return BadRequest("Parameter Id and petType Id must be the same");
+                return BadRequest("Parameter OwnerId and petType OwnerId must be the same");
             }
 
             try
@@ -153,7 +153,7 @@ namespace PetShop.RestAPI.Controllers
         /// <summary>
         /// Deletes a petType from database based on given id.
         /// </summary>
-        /// <param name="id">Id of petType to be deleted</param>
+        /// <param name="id">OwnerId of petType to be deleted</param>
         /// <returns></returns>
         /// <response code="200">Returns the successfully deleted petType </response>
         /// <response code="400">If the input is invalid</response>

@@ -5,7 +5,7 @@ namespace PetShop.Core.Entities.Entities.Business
 {
     public class Owner
     {
-        public int Id { get; set; }
+        public int OwnerId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public DateTime BirthDate { get; set; }
@@ -13,7 +13,7 @@ namespace PetShop.Core.Entities.Entities.Business
 
         public override string ToString()
         {
-            return $"ID = {Id.ToString()}, Name = {Name.ToString()}, BirthDate = {BirthDate.ToString()}, Email = {Email.ToString()},\n";
+            return $"ID = {OwnerId.ToString()}, Name = {Name.ToString()}, BirthDate = {BirthDate.ToString()}, Email = {Email.ToString()},\n";
         }
     }
 }

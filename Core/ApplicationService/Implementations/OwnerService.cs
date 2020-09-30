@@ -64,14 +64,14 @@ namespace PetShop.Core.ApplicationService.Implementations
             }
 
 
-            if (owner.Id != 0)
+            if (owner.OwnerId != 0)
             {
                 throw new InvalidDataException("A new owner cannot have an id, that is only for already existing pets");
             }
 
             if (owner.Pets != null)
             {
-                if (owner.Pets.Count < 0)
+                if (owner.Pets.Count > 0)
                 {
                     throw new InvalidDataException("You cant add pets to an owner like this, go ad an owner id to a pet instead");
                 }
@@ -89,27 +89,27 @@ namespace PetShop.Core.ApplicationService.Implementations
         public Owner DeleteOwner(int id)
         {
             Owner ownerToDelete;
-            if (!_ownerRepository.GetAllOwners().Exists(x => x.Id == id))
+            if (!_ownerRepository.GetAllOwners().Exists(x => x.OwnerId == id))
             {
                 throw new KeyNotFoundException("An owner with this ID does not exist");
             }
             else
             {
-                ownerToDelete = _ownerRepository.GetAllOwners().Find(x => x.Id == id);
+                ownerToDelete = _ownerRepository.GetAllOwners().Find(x => x.OwnerId == id);
                 return _ownerRepository.DeleteOwner(ownerToDelete);
             }
         }
 
         public Owner EditOwner(int idOfOwnerToEdit, Owner editedOwner)
         {
-            if (_ownerRepository.SearchById(editedOwner.Id) == null)
+            if (_ownerRepository.SearchById(editedOwner.OwnerId) == null)
             {
                 throw new KeyNotFoundException("An owner with this ID does not exist");
             }
 
             if (editedOwner.Pets != null)
             {
-                if (editedOwner.Pets.Count < 0)
+                if (editedOwner.Pets.Count > 0)
                 {
                     throw new InvalidDataException("You cant add pets to an owner like this, go ad an owner id to a pet instead");
                 }
@@ -122,7 +122,7 @@ namespace PetShop.Core.ApplicationService.Implementations
         public Owner SearchById(int id)
         {
             
-            if (!_ownerRepository.GetAllOwners().Exists(x => x.Id == id))
+            if (!_ownerRepository.GetAllOwners().Exists(x => x.OwnerId == id))
             {
                 throw new KeyNotFoundException("No owners with this id exist");
             }

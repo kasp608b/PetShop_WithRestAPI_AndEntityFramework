@@ -98,7 +98,7 @@ namespace PetShop.RestAPI.Controllers
         /// <summary>
         /// Adds a pet to the database based on object given in Json from request body.
         /// </summary>
-        /// <param name="pet">The pet to be added, it must not have an id. Id is only for object that already exist in the database</param>
+        /// <param name="pet">The pet to be added, it must not have an id. OwnerId is only for object that already exist in the database</param>
         /// <returns></returns>
         /// <response code="200">Returns the added pet</response>
         /// <response code="400">If the input is invalid</response>
@@ -121,9 +121,9 @@ namespace PetShop.RestAPI.Controllers
         }
 
         /// <summary>
-        /// Edits a pet based on Id and object given in Json from request body. 
+        /// Edits a pet based on OwnerId and object given in Json from request body. 
         /// </summary>
-        /// <param name="id">Id of pet to edit</param>
+        /// <param name="id">OwnerId of pet to edit</param>
         /// <param name="pet">The edited pet</param>
         /// <returns></returns>
         /// <response code="200">Returns the edited pet</response>
@@ -134,9 +134,9 @@ namespace PetShop.RestAPI.Controllers
         public ActionResult<Pet> EditPet(int id, [FromBody] Pet pet)
         {
 
-            if (id < 1 || id != pet.Id)
+            if (id < 1 || id != pet.PetId)
             {
-                return BadRequest("Parameter Id and pet Id must be the same");
+                return BadRequest("Parameter OwnerId and pet OwnerId must be the same");
             }
 
             try
@@ -161,7 +161,7 @@ namespace PetShop.RestAPI.Controllers
         /// <summary>
         /// Deletes a pet from database based on given id. 
         /// </summary>
-        /// <param name="id">Id of pet to delete</param>
+        /// <param name="id">OwnerId of pet to delete</param>
         /// <returns></returns>
         /// <response code="200">Returns the successfully deleted pet</response>
         /// <response code="400">If the input is invalid</response>

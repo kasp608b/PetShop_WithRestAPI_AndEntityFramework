@@ -106,7 +106,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
             return _context.PetTypes
                 .AsNoTracking()
                 .Include(petType => petType.Pets)
-                .FirstOrDefault(petType => petType.Id == id);
+                .FirstOrDefault(petType => petType.PetTypeId == id);
         }
 
         public PetType SearchByIdWithoutRelations(int id)
@@ -115,7 +115,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
 
             return _context.PetTypes
                 .AsNoTracking()
-                .FirstOrDefault(petType => petType.Id == id);
+                .FirstOrDefault(petType => petType.PetTypeId == id);
         }
 
         public int Count()

@@ -61,14 +61,14 @@ namespace PetShop.Core.ApplicationService.Implementations
                 throw new InvalidDataException("Pet name has to be longer than one");
             }
 
-            if (petType.Id != 0)
+            if (petType.PetTypeId != 0)
             {
                 throw new InvalidDataException("A new petType cannot have an id, that is only for already existing pets");
             }
 
             if (petType.Pets != null)
             {
-                if (petType.Pets.Count < 0)
+                if (petType.Pets.Count > 0)
                 {
                     throw new InvalidDataException("You cant add pets to a petType like this, go ad an owner id to a pet instead");
                 }
@@ -86,27 +86,27 @@ namespace PetShop.Core.ApplicationService.Implementations
         public PetType DeletePetType(int id)
         {
             PetType petTypeToDelete;
-            if (!_petTypeRepository.GetAllPetTypes().Exists(x => x.Id == id))
+            if (!_petTypeRepository.GetAllPetTypes().Exists(x => x.PetTypeId == id))
             {
                 throw new KeyNotFoundException("A pet with this ID does not exist");
             }
             else
             {
-                petTypeToDelete = _petTypeRepository.GetAllPetTypes().Find(x => x.Id == id);
+                petTypeToDelete = _petTypeRepository.GetAllPetTypes().Find(x => x.PetTypeId == id);
                 return _petTypeRepository.DeletePetType(petTypeToDelete);
             }
         }
 
         public PetType EditPetType(int idOfPetTypeToEdit, PetType editedPetType)
         {
-            if (_petTypeRepository.SearchById(editedPetType.Id) == null)
+            if (_petTypeRepository.SearchById(editedPetType.PetTypeId) == null)
             {
                 throw new KeyNotFoundException("An petType with this ID does not exist");
             }
 
             if (editedPetType.Pets != null)
             {
-                if (editedPetType.Pets.Count < 0)
+                if (editedPetType.Pets.Count > 0)
                 {
                     throw new InvalidDataException("You cant add pets to a petType like this, go ad an owner id to a pet instead");
                 }
@@ -118,7 +118,7 @@ namespace PetShop.Core.ApplicationService.Implementations
 
         public PetType SearchById(int id)
         {
-            if (!_petTypeRepository.GetAllPetTypes().Exists(x => x.Id == id))
+            if (!_petTypeRepository.GetAllPetTypes().Exists(x => x.PetTypeId == id))
             {
                 throw new KeyNotFoundException("No pets with this id exist");
             }

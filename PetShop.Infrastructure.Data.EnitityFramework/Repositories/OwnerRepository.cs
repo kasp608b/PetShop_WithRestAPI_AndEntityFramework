@@ -124,7 +124,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
             return _context.Owners
                 .AsNoTracking()
                 .Include(owner => owner.Pets)
-                .FirstOrDefault(owner => owner.Id == id);
+                .FirstOrDefault(owner => owner.OwnerId == id);
         }
 
         public Owner SearchByIdWithoutRelations(int id)
@@ -133,7 +133,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
 
             return _context.Owners
                 .AsNoTracking()
-                .FirstOrDefault(owner => owner.Id == id);
+                .FirstOrDefault(owner => owner.OwnerId == id);
         }
 
         public int Count()

@@ -57,7 +57,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
                     case "PetType":
                         if (_context.PetTypes.ToList().Exists(petType => petType.Name.Contains(filter.SearchText)))
                         {
-                            filtering = filtering.Where(pet => pet.PetType.Id.Equals(_context.PetTypes.ToList().Find(petType => petType.Name.Equals(filter.SearchText)).Id));
+                            filtering = filtering.Where(pet => pet.PetType.PetTypeId.Equals(_context.PetTypes.ToList().Find(petType => petType.Name.Equals(filter.SearchText)).PetTypeId));
                         }
                         else
                         {
@@ -97,7 +97,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
                     case "PreviousOwner":
                         if (_context.Owners.ToList().Exists(owner => owner.Name.Contains(filter.SearchText)))
                         {
-                            filtering = filtering.Where(pet => pet.Owner.Id.Equals(_context.Owners.ToList().Find(owner => owner.Name.Equals(filter.SearchText)).Id));
+                            filtering = filtering.Where(pet => pet.Owner.OwnerId.Equals(_context.Owners.ToList().Find(owner => owner.Name.Equals(filter.SearchText)).OwnerId));
                         }
                         else
                         {
@@ -146,7 +146,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
             //var petTypeChangeTracker = _context.ChangeTracker.Entries<PetType>();
 
             //if (petToAdd.PetType != null && _context.ChangeTracker.Entries<PetType>()
-            //    .FirstOrDefault(petTypeEntry => petTypeEntry.Entity.Id == petToAdd.PetType.Id) == null)
+            //    .FirstOrDefault(petTypeEntry => petTypeEntry.Entity.OwnerId == petToAdd.PetType.OwnerId) == null)
             //{
             //    _context.Attach(petToAdd.PetType);
             //}
@@ -154,7 +154,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
             //var petOwnerChangeTracker = _context.ChangeTracker.Entries<Owner>();
 
             //if (petToAdd.Owner != null && _context.ChangeTracker.Entries<Owner>()
-            //    .FirstOrDefault(ownerEntry =>ownerEntry.Entity.Id == petToAdd.Owner.Id) == null)
+            //    .FirstOrDefault(ownerEntry =>ownerEntry.Entity.OwnerId == petToAdd.Owner.OwnerId) == null)
             //{
             //    _context.Attach(petToAdd.Owner);
             //}
@@ -177,7 +177,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
             //var ChangeTracker = _context.ChangeTracker.Entries<Pet>();
             
             //if (editedPet.PetType != null && _context.ChangeTracker.Entries<PetType>()
-            //    .FirstOrDefault(petTypeEntry => petTypeEntry.Entity.Id == editedPet.PetType.Id) == null)
+            //    .FirstOrDefault(petTypeEntry => petTypeEntry.Entity.OwnerId == editedPet.PetType.OwnerId) == null)
             //{
             //    _context.Attach(editedPet.PetType);
             //}
@@ -189,7 +189,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
             //var petOwnerChangeTracker = _context.ChangeTracker.Entries<Owner>();
 
             //if (editedPet.Owner != null && _context.ChangeTracker.Entries<Owner>()
-            //    .FirstOrDefault(ownerEntry => ownerEntry.Entity.Id == editedPet.Owner.Id) == null)
+            //    .FirstOrDefault(ownerEntry => ownerEntry.Entity.OwnerId == editedPet.Owner.OwnerId) == null)
             //{
             //    _context.Attach(editedPet.Owner);
             //}
@@ -198,11 +198,22 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
             //    _context.Entry(editedPet).Reference(pet => pet.Owner).IsModified = true;
             //}
 
-            _context.Attach(editedPet).State = EntityState.Modified;
-            _context.Entry(editedPet).Reference(pet => pet.PetType).IsModified = true;
-            _context.Entry(editedPet).Reference(pet => pet.Owner).IsModified = true;
-            _context.SaveChanges();
-            return editedPet;
+           // _context.Attach(editedPet).State = EntityState.Modified;
+
+           if (editedPet.Owner != null)
+           {
+               _context.Attach(editedPet.Owner).State = EntityState.Unchanged;
+           }
+           else
+           {
+               _context.Entry(editedPet).Reference(pet => pet.Owner).IsModified = true;
+
+           }
+
+           _context.Attach(editedPet.PetType).State = EntityState.Unchanged;
+           _context.Update(editedPet);
+           _context.SaveChanges();
+           return editedPet;
         }
 
         public Pet SearchById(int id)
@@ -213,7 +224,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
                 .AsNoTracking()
                 .Include(pet => pet.Owner)
                 .Include(pet => pet.PetType)
-                .FirstOrDefault(pet => pet.Id == id);
+                .FirstOrDefault(pet => pet.PetId == id);
         }
 
         public Pet SearchByIdWithoutRelations(int id)
@@ -222,7 +233,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
 
             return _context.Pets
                 .AsNoTracking()
-                .FirstOrDefault(pet => pet.Id == id);
+                .FirstOrDefault(pet => pet.PetId == id);
         }
 
         public int Count()

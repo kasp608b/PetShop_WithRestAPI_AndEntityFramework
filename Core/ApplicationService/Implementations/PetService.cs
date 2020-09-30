@@ -42,7 +42,7 @@ namespace PetShop.Core.ApplicationService.Implementations
                 throw new InvalidDataException("Pet name has to be longer than one");
             }
 
-            if (pet.Id != 0)
+            if (pet.PetId != 0)
             {
                 throw new InvalidDataException("A new pet cannot have an id, that is only for already existing pets");
             }
@@ -54,14 +54,14 @@ namespace PetShop.Core.ApplicationService.Implementations
 
             if (pet.PetType != null)
             {
-                if (_petTypeRepository.SearchById(pet.PetType.Id) == null)
+                if (_petTypeRepository.SearchById(pet.PetType.PetTypeId) == null)
                 {
                     throw new InvalidDataException("The petType has to be an existing petType in the database");
                 }
             }
             //if (pet.PetType != null)
             //{
-            //    var petType = _petTypeRepository.SearchByIdWithoutRelations(pet.PetType.Id);
+            //    var petType = _petTypeRepository.SearchByIdWithoutRelations(pet.PetType.OwnerId);
             //    if (petType == null)
             //    {
             //        throw new InvalidDataException("The petType has to be an existing petType in the database");
@@ -77,7 +77,7 @@ namespace PetShop.Core.ApplicationService.Implementations
 
             //if (pet.Owner != null)
             //{
-            //    var owner = _ownerRepository.SearchByIdWithoutRelations(pet.Owner.Id);
+            //    var owner = _ownerRepository.SearchByIdWithoutRelations(pet.Owner.OwnerId);
             //    if (owner == null)
             //    {
             //        throw new InvalidDataException("The owner has to be an existing owner in the database");
@@ -100,12 +100,12 @@ namespace PetShop.Core.ApplicationService.Implementations
         public Pet DeletePet(int id)
         {
            Pet petToDelete;
-           if(!_petRepository.GetAllPets().Exists(x => x.Id == id))
+           if(!_petRepository.GetAllPets().Exists(x => x.PetId == id))
            {
                 throw new KeyNotFoundException("A pet with this ID does not exist");
            }
 
-           petToDelete = _petRepository.GetAllPets().Find(x => x.Id == id);
+           petToDelete = _petRepository.GetAllPets().Find(x => x.PetId == id);
            return _petRepository.DeletePet(petToDelete);
            
 
@@ -113,7 +113,7 @@ namespace PetShop.Core.ApplicationService.Implementations
 
         public Pet EditPet(int id, Pet editedPet)
         {
-            //if (!_petRepository.GetAllPets().Exists(x => x.Id == id))
+            //if (!_petRepository.GetAllPets().Exists(x => x.OwnerId == id))
             //{
             //    throw new KeyNotFoundException("A pet with this ID does not exist");
             //}
@@ -129,14 +129,14 @@ namespace PetShop.Core.ApplicationService.Implementations
                 throw new InvalidDataException("Pet name has to be longer than one");
             }
 
-            if (editedPet.Id == 0)
+            if (editedPet.PetId == 0)
             {
                 throw new InvalidDataException("A new pet cannot have an id, that is only for already existing pets");
             }
 
-            if (editedPet.Id != 0)
+            if (editedPet.PetId != 0)
             {
-                if (_petRepository.SearchById(editedPet.Id) == null)
+                if (_petRepository.SearchById(editedPet.PetId) == null)
                 {
                     throw new InvalidDataException("edited pet has to be an existing pet");
                 }
@@ -149,7 +149,7 @@ namespace PetShop.Core.ApplicationService.Implementations
 
             if (editedPet.PetType != null)
             {
-                if (_petTypeRepository.SearchById(editedPet.PetType.Id) == null)
+                if (_petTypeRepository.SearchById(editedPet.PetType.PetTypeId) == null)
                 {
                     throw new InvalidDataException("The petType has to be an existing petType in the database");
                 }
@@ -157,7 +157,7 @@ namespace PetShop.Core.ApplicationService.Implementations
 
             //if (editedPet.PetType != null)
             //{
-            //    var petType = _petTypeRepository.SearchByIdWithoutRelations(editedPet.PetType.Id);
+            //    var petType = _petTypeRepository.SearchByIdWithoutRelations(editedPet.PetType.OwnerId);
             //    if (petType == null)
             //    {
             //        throw new InvalidDataException("The petType has to be an existing petType in the database");
@@ -171,17 +171,16 @@ namespace PetShop.Core.ApplicationService.Implementations
             //    throw new InvalidDataException("Pet has to have a petType");
             //}
 
-            //if (editedPet.Owner != null)
-            //{
-            //    var owner = _ownerRepository.SearchByIdWithoutRelations(editedPet.Owner.Id);
-            //    if (owner == null)
-            //    {
-            //        throw new InvalidDataException("The owner has to be an existing owner in the database");
-            //    }
+            if (editedPet.Owner != null)
+            {
+                var owner = _ownerRepository.SearchByIdWithoutRelations(editedPet.Owner.OwnerId);
+                if (owner == null)
+                {
+                    throw new InvalidDataException("The owner has to be an existing owner in the database");
+                }
 
-            //    editedPet.Owner = owner;
 
-            //}
+            }
 
             //Pet petToBeEdited = _petRepository.SearchByIdWithoutRelations(id);
             //petToBeEdited.Owner = editedPet.Owner;
@@ -236,7 +235,7 @@ namespace PetShop.Core.ApplicationService.Implementations
 
         public Pet SearchById(int id)
         {
-            if (!_petRepository.GetAllPets().Exists(x => x.Id == id))
+            if (!_petRepository.GetAllPets().Exists(x => x.PetId == id))
             {
                 throw new KeyNotFoundException("No pets with this id exist");
             }
