@@ -12,18 +12,28 @@ namespace PetShop.Infrastructure.Data.EntityFramework
         private readonly IPetRepository _petRepository;
         private readonly IPetTypeRepository _petTypeRepository;
         private readonly IOwnerRepository _ownerRepository;
+        private readonly IColorRepository _colorRepository;
+        private readonly IPetColorRepository _petColorRepository;
 
-        public DataInitializer(IPetRepository petRepository, IPetTypeRepository petTypeRepository, IOwnerRepository ownerRepository)
+        public DataInitializer(IPetRepository petRepository, IPetTypeRepository petTypeRepository, IOwnerRepository ownerRepository, IColorRepository colorRepository, IPetColorRepository petColorRepository)
         {
             _petRepository = petRepository;
             _petTypeRepository = petTypeRepository;
             _ownerRepository = ownerRepository;
+            _colorRepository = colorRepository;
+            _petColorRepository = petColorRepository;
         }
 
         public void InitData()
         {
-            List<Pet> pets;
+            List<PetColor> petColors1 = new List<PetColor>();
+            List<PetColor> petColors2 = new List<PetColor>();
+            List<PetColor> petColors3 = new List<PetColor>();
+            List<PetColor> petColors4 = new List<PetColor>();
 
+            List<Pet> pets = new List<Pet>();
+
+            
 
             Owner owner1 = new Owner
             {
@@ -70,45 +80,156 @@ namespace PetShop.Infrastructure.Data.EntityFramework
               _petTypeRepository.AddPetType(petType1);
               _petTypeRepository.AddPetType(petType2);
               _petTypeRepository.AddPetType(petType3);
+            
+                Color color1 = new Color
+                {
+                Name = "Red"
+                };
 
-            pets = new List<Pet> {
-                new Pet
+                Color color2 = new Color
+                {
+                    Name = "Blue"
+                };
+
+                Color color3 = new Color
+                {
+                    Name = "Yellow"
+                };
+
+                Color color4 = new Color
+                {
+                    Name = "Green"
+                };
+
+                _colorRepository.AddColor(color1);
+                _colorRepository.AddColor(color2);
+                _colorRepository.AddColor(color3);
+                _colorRepository.AddColor(color4);
+
+
+                Pet pet1 = new Pet
                 {
                     Name = "Jerry",
                     PetType = petType1,
                     BirthDate = DateTime.Now.AddYears(-12),
-                    Color = "Blue",
                     Owner = owner1,
                     Price = 50,
                     SoldDate = DateTime.Now.AddYears(-2),
 
-                },
-                new Pet
+                };
+
+                Pet pet2 = new Pet
                 {
                     Name = "Tom",
-                    PetType =  petType2,
+                    PetType = petType2,
                     BirthDate = DateTime.Now.AddYears(-22),
-                    Color = "Red",
                     Owner = owner2,
                     Price = 10,
                     SoldDate = DateTime.Now.AddYears(-5),
-                },
-                new Pet
-                {
+                };
+
+               Pet pet3 = new Pet
+               {
                     Name = "Cinc",
-                    PetType =  petType3,
+                    PetType = petType3,
                     BirthDate = DateTime.Now.AddYears(-1),
-                    Color = "Purple",
                     Owner = owner3,
                     Price = 100,
                     SoldDate = DateTime.Now.AddYears(-4),
-                }
-            };
+               };
 
-            foreach (Pet pet in pets)
-            {
-                _petRepository.AddPet(pet);
-            }
+
+               pet1.PetColors = new List<PetColor>
+               {
+                   new PetColor
+                   {
+                       Pet = pet1,
+                       Color = color1,
+                   } 
+               };
+
+               pet2.PetColors = new List<PetColor>
+               {
+                   new PetColor 
+                   {
+                       Pet = pet2, 
+                       Color = color1
+
+                   },
+                   new PetColor
+                   {
+                       Pet = pet2,
+                       Color = color2
+
+                   }
+               };
+
+               pet3.PetColors = new List<PetColor>
+               {
+                   new PetColor
+                   {
+                       Pet = pet3,
+                       Color = color1
+
+                   },
+                   new PetColor
+                   {
+                       Pet = pet3,
+                       Color = color2
+
+                   },
+
+                   new PetColor
+                   {
+                       Pet = pet3,
+                       Color = color3
+
+                   }
+               };
+
+            //pet3.PetColors = new List<PetColor>
+            //{
+            //    petColor1,
+            //    petColor2,
+            //    petColor3
+            //};
+
+            //pets.Add(pet1);
+            //pets.Add(pet2);
+            //pets.Add(pet3);
+
+            //_petRepository.AddPets(pets);
+
+            _petRepository.AddPet(pet1);
+            _petRepository.AddPet(pet2);
+            _petRepository.AddPet(pet3);
+
+
+            //_petColorRepository.AddPetColor(petColor1);
+            //_petColorRepository.AddPetColor(petColor2);
+            //_petColorRepository.AddPetColor(petColor3);
+            //_petColorRepository.AddPetColor(petColor4);
+            //_petColorRepository.AddPetColor(petColor5);
+            //    //_petColorRepository.AddPetColor(petColor6);
+
+            //petColors1.Add(petColor1);
+
+            //    petColors2.Add(petColor1);
+            //    petColors2.Add(petColor2);
+
+            //    petColors3.Add(petColor1);
+            //    petColors3.Add(petColor2);
+            //    petColors3.Add(petColor3);
+
+            //    petColors4.Add(petColor1);
+            //    petColors4.Add(petColor2);
+            //    petColors4.Add(petColor3);
+            //    petColors4.Add(petColor4);
+
+
+
+
+
 
 
         }

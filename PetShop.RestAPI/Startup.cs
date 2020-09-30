@@ -52,6 +52,8 @@ namespace PetShop.RestAPI
             services.AddScoped<IOwnerService, OwnerService>();
             services.AddScoped<IPetTypeRepository, PetTypeRepository>();
             services.AddScoped<IPetTypeService, PetTypeService>();
+            services.AddScoped<IColorRepository, ColorRepository>();
+            services.AddScoped<IPetColorRepository, PetColorRepository>();
             services.AddScoped<IParser, Parser>();
             services.AddControllers();
             services.AddControllers().AddNewtonsoftJson(o =>
@@ -98,11 +100,13 @@ namespace PetShop.RestAPI
                     var petRepo = scope.ServiceProvider.GetService<IPetRepository>();
                     var ownerRepo = scope.ServiceProvider.GetService<IOwnerRepository>();
                     var petTypeRepo = scope.ServiceProvider.GetService<IPetTypeRepository>();
+                    var colorRepo = scope.ServiceProvider.GetService<IColorRepository>();
+                    var petColorRepo = scope.ServiceProvider.GetService<IPetColorRepository>();
                     var context = scope.ServiceProvider.GetService<PetShopDbContext>();
                     
                     context.Database.EnsureDeleted();
                     context.Database.EnsureCreated();
-                    DataInitializer dataInitializer = new DataInitializer(petRepo, petTypeRepo, ownerRepo);
+                    DataInitializer dataInitializer = new DataInitializer(petRepo, petTypeRepo, ownerRepo, colorRepo, petColorRepo);
                     dataInitializer.InitData();
 
                     // new DataInitializer(petRepo, ownerRepo, petTypeRepo).InitData(); 

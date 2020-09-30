@@ -90,10 +90,6 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
                         }
                         break;
 
-                    case "Color":
-                        filtering = filtering.Where(p => p.Color.Contains(filter.SearchText));
-                        break;
-
                     case "PreviousOwner":
                         if (_context.Owners.ToList().Exists(owner => owner.Name.Contains(filter.SearchText)))
                         {
@@ -164,6 +160,12 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
             return petToAdd;
         }
 
+        public void AddPets(List<Pet> pets)
+        {
+            _context.AddRange(pets);
+            _context.SaveChanges();
+        }
+
         public Pet DeletePet(Pet petToDelete)
         {
             var deletedPet = _context.Pets.Remove(petToDelete).Entity;
@@ -224,6 +226,8 @@ namespace PetShop.Infrastructure.Data.EntityFramework.Repositories
                 .AsNoTracking()
                 .Include(pet => pet.Owner)
                 .Include(pet => pet.PetType)
+                .Include(pet => pet.PetColors)
+                .ThenInclude(petColor => petColor.Color)
                 .FirstOrDefault(pet => pet.PetId == id);
         }
 

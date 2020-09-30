@@ -16,6 +16,8 @@ namespace PetShop.Core.DomainService
 
         public Pet AddPet(Pet petToAdd);
 
+        public void AddPets(List<Pet> pets);
+
         public Pet DeletePet(Pet petToDelete);
 
         public Pet EditPet(int id, Pet editedPet);

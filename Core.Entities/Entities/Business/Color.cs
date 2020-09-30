@@ -7,6 +7,6 @@ namespace PetShop.Core.Entities.Entities.Business
         public int ColorId { get; set; }
         public string Name { get; set; }
 
-       // public ICollection<PetColor> PetColors { get; set; }
+        public ICollection<PetColor> PetColors { get; set; }
     }
 }
