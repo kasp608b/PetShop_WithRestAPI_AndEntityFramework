@@ -24,7 +24,7 @@ using PetShop.Core.DomainService;
 using PetShop.Core.HelperClasses.Implementations;
 using PetShop.Core.HelperClasses.Interfaces;
 using PetShop.Infrastructure.Data.EntityFramework;
-using PetShop.Infrastructure.Data.EntityFramework.Authentication.Implementations;
+using PetShop.Infrastructure.Data.EntityFramework.Authentication;
 using PetShop.Infrastructure.Data.EntityFramework.Repositories;
 
 namespace PetShop.RestAPI

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using PetShop.Core.DomainService;
 using PetShop.Core.Entities.Entities.Business;
 
-namespace PetShop.Infrastructure.Data.EntityFramework.Authentication.Implementations
+namespace PetShop.Infrastructure.Data.EntityFramework.Authentication
 {
     public class AuthenticationHelper : IAuthenticationHelper
     {
