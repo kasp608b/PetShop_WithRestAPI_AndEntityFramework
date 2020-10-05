@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetShop.Core.ApplicationService;
 using PetShop.Core.ApplicationService.Interfaces;
@@ -35,7 +36,8 @@ namespace PetShop.RestAPI.Controllers
         /// <response code="200">Returns the filtered list of owners</response>
         /// <response code="400">If the input is invalid</response>
         /// <response code="404">If the api could not find the requested pets</response>
-        /// <response code="500">If something went from with the database</response> 
+        /// <response code="500">If something went from with the database</response>
+        [Authorize]
         [HttpGet]
         public ActionResult<FilteredList<Owner>> GetOwners([FromQuery] Filter filter)
         {
@@ -65,7 +67,8 @@ namespace PetShop.RestAPI.Controllers
         /// <response code="200">Returns the requested owner which includes all the pets that the owner has.</response>
         /// <response code="400">If the input is invalid</response>
         /// <response code="404">If the api could not find the requested owner</response>
-        /// <response code="500">If something went from with the database</response> 
+        /// <response code="500">If something went from with the database</response>
+        [Authorize(Roles = "Administrator")]
         [HttpGet("{id}")]
         public ActionResult<Owner> GetOwners(int id)
         {
@@ -95,7 +98,8 @@ namespace PetShop.RestAPI.Controllers
         /// <returns></returns>
         /// <response code="200">Returns the added owner object</response>
         /// <response code="400">If the input is invalid</response>
-        /// <response code="500">If something went from with the database</response> 
+        /// <response code="500">If something went from with the database</response>
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public ActionResult<Owner> AddOwner([FromBody] Owner owner)
         {
@@ -122,7 +126,8 @@ namespace PetShop.RestAPI.Controllers
         /// <response code="200">Returns the edited owner object</response>
         /// <response code="400">If the input is invalid</response>
         /// <response code="404">If the api could not find the requested owner</response>
-        /// <response code="500">If something went from with the database</response> 
+        /// <response code="500">If something went from with the database</response>
+        [Authorize(Roles = "Administrator")]
         [HttpPut("{id}")]
         public ActionResult<Owner> EditOwner(int id, [FromBody] Owner owner)
         {
@@ -158,7 +163,8 @@ namespace PetShop.RestAPI.Controllers
         /// <response code="200">Returns the deleted owner</response>
         /// <response code="400">If the input is invalid</response>
         /// <response code="404">If the api could not find the requested owner</response>
-        /// <response code="500">If something went from with the database</response> 
+        /// <response code="500">If something went from with the database</response>
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
         public ActionResult<Owner> Delete(int id)
         {

@@ -11,6 +11,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework
         public DbSet<PetType> PetTypes { get; set; }
         public DbSet<Color> Colors { get; set; }
         public DbSet<PetColor> PetColors { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -14,15 +14,18 @@ namespace PetShop.Infrastructure.Data.EntityFramework
         private readonly IOwnerRepository _ownerRepository;
         private readonly IColorRepository _colorRepository;
         private readonly IPetColorRepository _petColorRepository;
+        private readonly IUserRepository _userRepository;
 
-        public DataInitializer(IPetRepository petRepository, IPetTypeRepository petTypeRepository, IOwnerRepository ownerRepository, IColorRepository colorRepository, IPetColorRepository petColorRepository)
+        public DataInitializer(IPetRepository petRepository, IPetTypeRepository petTypeRepository, IOwnerRepository ownerRepository, IColorRepository colorRepository, IPetColorRepository petColorRepository, IUserRepository userRepository)
         {
             _petRepository = petRepository;
             _petTypeRepository = petTypeRepository;
             _ownerRepository = ownerRepository;
             _colorRepository = colorRepository;
             _petColorRepository = petColorRepository;
+            _userRepository = userRepository;
         }
+
 
         public void InitData()
         {
@@ -203,6 +206,25 @@ namespace PetShop.Infrastructure.Data.EntityFramework
             _petRepository.AddPet(pet1);
             _petRepository.AddPet(pet2);
             _petRepository.AddPet(pet3);
+
+
+            User user1 = new User
+            {
+                Username = "UserJoe",
+                Password = "1234",
+                IsAdmin = false
+            };
+
+            User user2 = new User
+            {
+                Username = "AdminAnn",
+                Password = "1234", 
+                IsAdmin = true
+            };
+
+
+            _userRepository.AddUser(user1);
+            _userRepository.AddUser(user2);
 
 
             //_petColorRepository.AddPetColor(petColor1);
