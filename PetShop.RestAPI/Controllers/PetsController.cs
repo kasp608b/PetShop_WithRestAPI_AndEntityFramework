@@ -29,6 +29,40 @@ namespace PetShop.RestAPI.Controllers
             _petService = petService;
         }
 
+        /// <summary>
+        /// Returns af  list of pets based . 
+        /// </summary>
+        /// <returns>A list of pets</returns>
+        /// <response code="200">Returns the filtered list of pets</response>
+        /// <response code="400">If the input is invalid</response>
+        /// <response code="404">If the api could not find the requested pets</response>
+        /// <response code="500">If something went from with the database</response>
+        [HttpGet]
+        [Route("GetAllPets")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+
+        public ActionResult<FilteredList<Pet>> GetAllPets()
+        {
+            try
+            {
+                return Ok(_petService.GetPets());
+            }
+            catch (InvalidDataException e)
+            {
+                return BadRequest("Something went wrong with your request\n" + e.Message);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound("Could not find requested pet\n" + e.Message);
+            }
+            catch (DataBaseException e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
 
         /// <summary>
         /// Returns af filtered list of pets based on given filter. 
@@ -39,7 +73,7 @@ namespace PetShop.RestAPI.Controllers
         /// <response code="400">If the input is invalid</response>
         /// <response code="404">If the api could not find the requested pets</response>
         /// <response code="500">If something went from with the database</response>
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
