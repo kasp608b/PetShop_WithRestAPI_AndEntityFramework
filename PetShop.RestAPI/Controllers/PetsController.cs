@@ -39,7 +39,7 @@ namespace PetShop.RestAPI.Controllers
         /// <response code="400">If the input is invalid</response>
         /// <response code="404">If the api could not find the requested pets</response>
         /// <response code="500">If something went from with the database</response>
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
