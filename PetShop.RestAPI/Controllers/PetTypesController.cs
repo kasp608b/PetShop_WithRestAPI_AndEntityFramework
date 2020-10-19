@@ -29,7 +29,7 @@ namespace PetShop.RestAPI.Controllers
 
 
         /// <summary>
-        /// Returns a filtered list of petTypes based on given filter.
+        /// Returns a filtered list of petTypes based on given filter , requires user authentication
         /// </summary>
         /// <param name="filter">The filter collects the different search and ordering queries from the request header</param>
         /// <returns></returns>
@@ -60,7 +60,7 @@ namespace PetShop.RestAPI.Controllers
         }
 
         /// <summary>
-        /// Returns a PetType based on given id
+        /// Returns a PetType based on given id, requires administrator privileges.
         /// </summary>
         /// <param name="id">OwnerId of the requested petType</param>
         /// <returns></returns>
@@ -91,7 +91,7 @@ namespace PetShop.RestAPI.Controllers
         }
 
         /// <summary>
-        /// Adds a petType to the database based on object given in Json from request body.
+        /// Adds a petType to the database based on object given in Json from request body, requires administrator privileges.
         /// </summary>
         /// <param name="petType">The petType object to be added in the form of a Json in the request body</param>
         /// <returns></returns>
@@ -117,7 +117,7 @@ namespace PetShop.RestAPI.Controllers
         }
 
         /// <summary>
-        /// Edits a petType based on given id and object given in Json from request body.
+        /// Edits a petType based on given id and object given in Json from request body, requires administrator privileges.
         /// </summary>
         /// <param name="id">OwnerId of petType to be edited</param>
         /// <param name="petType">Edited petType</param>
@@ -133,7 +133,7 @@ namespace PetShop.RestAPI.Controllers
 
             if (id < 1 || id != petType.PetTypeId)
             {
-                return BadRequest("Parameter OwnerId and petType OwnerId must be the same");
+                return BadRequest("Parameter PetTypeId and petType PetTypeId must be the same");
             }
 
             try
@@ -156,7 +156,7 @@ namespace PetShop.RestAPI.Controllers
         }
 
         /// <summary>
-        /// Deletes a petType from database based on given id.
+        /// Deletes a petType from database based on given id, requires administrator privileges.
         /// </summary>
         /// <param name="id">OwnerId of petType to be deleted</param>
         /// <returns></returns>

@@ -15,8 +15,8 @@ namespace PetShop.Infrastructure.Data.EntityFramework
         private readonly IColorRepository _colorRepository;
         private readonly IPetColorRepository _petColorRepository;
         private readonly IUserRepository _userRepository;
-
-        public DataInitializer(IPetRepository petRepository, IPetTypeRepository petTypeRepository, IOwnerRepository ownerRepository, IColorRepository colorRepository, IPetColorRepository petColorRepository, IUserRepository userRepository)
+        private IAuthenticationHelper authenticationHelper;
+        public DataInitializer(IPetRepository petRepository, IPetTypeRepository petTypeRepository, IOwnerRepository ownerRepository, IColorRepository colorRepository, IPetColorRepository petColorRepository, IUserRepository userRepository, IAuthenticationHelper authHelper)
         {
             _petRepository = petRepository;
             _petTypeRepository = petTypeRepository;
@@ -24,6 +24,7 @@ namespace PetShop.Infrastructure.Data.EntityFramework
             _colorRepository = colorRepository;
             _petColorRepository = petColorRepository;
             _userRepository = userRepository;
+            authenticationHelper = authHelper;
         }
 
 
@@ -207,18 +208,25 @@ namespace PetShop.Infrastructure.Data.EntityFramework
             _petRepository.AddPet(pet2);
             _petRepository.AddPet(pet3);
 
+            // Create two users with hashed and salted passwords
+            string password = "1234";
+            byte[] passwordHashJoe, passwordSaltJoe, passwordHashAnn, passwordSaltAnn;
+            authenticationHelper.CreatePasswordHash(password, out passwordHashJoe, out passwordSaltJoe);
+            authenticationHelper.CreatePasswordHash(password, out passwordHashAnn, out passwordSaltAnn);
 
             User user1 = new User
             {
                 Username = "UserJoe",
-                Password = "1234",
+                PasswordHash = passwordHashJoe,
+                PasswordSalt = passwordSaltJoe,
                 IsAdmin = false
             };
 
             User user2 = new User
             {
                 Username = "AdminAnn",
-                Password = "1234", 
+                PasswordHash = passwordHashAnn,
+                PasswordSalt = passwordSaltAnn,
                 IsAdmin = true
             };
 

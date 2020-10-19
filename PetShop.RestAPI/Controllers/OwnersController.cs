@@ -29,7 +29,7 @@ namespace PetShop.RestAPI.Controllers
 
 
         /// <summary>
-        /// Returns a filtered list of owners based on given filter. 
+        /// Returns a filtered list of owners based on given filter, requires user authentication. 
         /// </summary>
         /// <param name="filter">The filter collects the different search and ordering queries from the request header</param>
         /// <returns></returns>
@@ -60,7 +60,7 @@ namespace PetShop.RestAPI.Controllers
         }
 
         /// <summary>
-        /// Return an owner based on given id. 
+        /// Return an owner based on given id, requires administrator privileges. 
         /// </summary>
         /// <param name="id">OwnerId of requested owner</param>
         /// <returns></returns>
@@ -92,7 +92,7 @@ namespace PetShop.RestAPI.Controllers
         }
 
         /// <summary>
-        /// Adds an owner to database based on object given in Json given in request body.
+        /// Adds an owner to database based on object given in Json given in request body, requires administrator privileges.
         /// </summary>
         /// <param name="owner">An owner object in Json to be added to database</param>
         /// <returns></returns>
@@ -118,7 +118,7 @@ namespace PetShop.RestAPI.Controllers
         }
 
         /// <summary>
-        /// Edits an owner based on given id and an object given in Json in request body.
+        /// Edits an owner based on given id and an object given in Json in request body, requires administrator privileges.
         /// </summary>
         /// <param name="id">OwnerId of the owner to be edited</param>
         /// <param name="owner">edited owner object in the form of Json</param>
@@ -156,7 +156,7 @@ namespace PetShop.RestAPI.Controllers
         }
 
         /// <summary>
-        /// Deletes a pet from database based on given id. 
+        /// Deletes a pet from database based on given id, requires administrator privileges.
         /// </summary>
         /// <param name="id">OwnerId of owner to delete</param>
         /// <returns></returns>

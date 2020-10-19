@@ -78,7 +78,6 @@ namespace PetShop.RestAPI
 
                 })
             );
-            
             services.AddScoped<IPetRepository, PetRepository>();
             services.AddScoped<IPetService, PetService>();
             services.AddScoped<IOwnerRepository, OwnerRepository>();
@@ -140,11 +139,12 @@ namespace PetShop.RestAPI
                     var colorRepo = scope.ServiceProvider.GetService<IColorRepository>();
                     var petColorRepo = scope.ServiceProvider.GetService<IPetColorRepository>();
                     var userRepo = scope.ServiceProvider.GetService<IUserRepository>();
+                    var authHelp = scope.ServiceProvider.GetService<IAuthenticationHelper>();
                     var context = scope.ServiceProvider.GetService<PetShopDbContext>();
                     
                     context.Database.EnsureDeleted();
                     context.Database.EnsureCreated();
-                    DataInitializer dataInitializer = new DataInitializer(petRepo, petTypeRepo, ownerRepo, colorRepo, petColorRepo, userRepo);
+                    DataInitializer dataInitializer = new DataInitializer(petRepo, petTypeRepo, ownerRepo, colorRepo, petColorRepo, userRepo, authHelp);
                     dataInitializer.InitData();
 
                     // new DataInitializer(petRepo, ownerRepo, petTypeRepo).InitData(); 

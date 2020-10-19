@@ -30,7 +30,7 @@ namespace PetShop.RestAPI.Controllers
         }
 
         /// <summary>
-        /// Returns af  list of pets based . 
+        /// Returns af  list of pets based, does not require authentication. 
         /// </summary>
         /// <returns>A list of pets</returns>
         /// <response code="200">Returns the filtered list of pets</response>
@@ -65,7 +65,7 @@ namespace PetShop.RestAPI.Controllers
         }
 
         /// <summary>
-        /// Returns af filtered list of pets based on given filter. 
+        /// Returns af filtered list of pets based on given filter, requires user authentication. 
         /// </summary>
         /// <param name="filter"> The filter collects the different search and ordering queries from the request header</param>
         /// <returns>A filtered list of pets</returns>
@@ -101,7 +101,7 @@ namespace PetShop.RestAPI.Controllers
         }
 
         /// <summary>
-        /// Returns af pet based on given id
+        /// Returns af pet based on given id, requires administrator privileges.
         /// </summary>
         /// <param name="id"> An id of an existing pet, must be a valid int</param>
         /// <returns></returns>
@@ -133,7 +133,7 @@ namespace PetShop.RestAPI.Controllers
         }
 
         /// <summary>
-        /// Adds a pet to the database based on object given in Json from request body.
+        /// Adds a pet to the database based on object given in Json from request body, requires administrator privileges.
         /// </summary>
         /// <param name="pet">The pet to be added, it must not have an id. OwnerId is only for object that already exist in the database</param>
         /// <returns></returns>
@@ -159,7 +159,7 @@ namespace PetShop.RestAPI.Controllers
         }
 
         /// <summary>
-        /// Edits a pet based on OwnerId and object given in Json from request body. 
+        /// Edits a pet based on OwnerId and object given in Json from request body, requires administrator privileges. 
         /// </summary>
         /// <param name="id">OwnerId of pet to edit</param>
         /// <param name="pet">The edited pet</param>
@@ -175,7 +175,7 @@ namespace PetShop.RestAPI.Controllers
 
             if (id < 1 || id != pet.PetId)
             {
-                return BadRequest("Parameter OwnerId and pet OwnerId must be the same");
+                return BadRequest("Parameter PetId and pet PetId must be the same");
             }
 
             try
@@ -198,7 +198,7 @@ namespace PetShop.RestAPI.Controllers
         }
 
         /// <summary>
-        /// Deletes a pet from database based on given id. 
+        /// Deletes a pet from database based on given id, requires administrator privileges.
         /// </summary>
         /// <param name="id">OwnerId of pet to delete</param>
         /// <returns></returns>
