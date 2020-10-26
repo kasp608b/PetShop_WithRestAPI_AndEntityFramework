@@ -31,16 +31,36 @@ namespace PetShop.RestAPI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            Environment = env;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //if (Environment.IsDevelopment())
+            //{
+                //SqlLite database:
+                services.AddDbContext<PetShopDbContext>(
+                    opt =>
+                    {
+                        opt.UseSqlite("Data Source=PetShop.db");
+                    }, ServiceLifetime.Transient);
+            //}
+            //else
+            //{
+            //    //SqlServer database:
+            //    services.AddDbContext<PetShopDbContext>(
+            //        opt =>
+            //        {
+            //            opt.UseSqlServer("defaultConnection");
+            //        }, ServiceLifetime.Transient);
+            //}
 
             // Create a byte array with random values. This byte array is used
             // to generate a key for signing JWT tokens.
@@ -97,11 +117,8 @@ namespace PetShop.RestAPI
 
             });
 
-            services.AddDbContext<PetShopDbContext>(
-                opt =>
-                {
-                    opt.UseSqlite("Data Source=PetShop.db");
-                }, ServiceLifetime.Transient);
+           
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -128,28 +145,36 @@ namespace PetShop.RestAPI
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseSwagger();
-            //if (env.IsDevelopment())
-            //{
+           
             app.UseDeveloperExceptionPage();
                 using (var scope = app.ApplicationServices.CreateScope())
                 {
-                    var petRepo = scope.ServiceProvider.GetService<IPetRepository>();
-                    var ownerRepo = scope.ServiceProvider.GetService<IOwnerRepository>();
-                    var petTypeRepo = scope.ServiceProvider.GetService<IPetTypeRepository>();
-                    var colorRepo = scope.ServiceProvider.GetService<IColorRepository>();
-                    var petColorRepo = scope.ServiceProvider.GetService<IPetColorRepository>();
-                    var userRepo = scope.ServiceProvider.GetService<IUserRepository>();
-                    var authHelp = scope.ServiceProvider.GetService<IAuthenticationHelper>();
-                    var context = scope.ServiceProvider.GetService<PetShopDbContext>();
-                    
-                    context.Database.EnsureDeleted();
-                    context.Database.EnsureCreated();
-                    DataInitializer dataInitializer = new DataInitializer(petRepo, petTypeRepo, ownerRepo, colorRepo, petColorRepo, userRepo, authHelp);
-                    dataInitializer.InitData();
+                    //if (env.IsDevelopment())
+                    //{
+                        var petRepo = scope.ServiceProvider.GetService<IPetRepository>();
+                        var ownerRepo = scope.ServiceProvider.GetService<IOwnerRepository>();
+                        var petTypeRepo = scope.ServiceProvider.GetService<IPetTypeRepository>();
+                        var colorRepo = scope.ServiceProvider.GetService<IColorRepository>();
+                        var petColorRepo = scope.ServiceProvider.GetService<IPetColorRepository>();
+                        var userRepo = scope.ServiceProvider.GetService<IUserRepository>();
+                        var authHelp = scope.ServiceProvider.GetService<IAuthenticationHelper>();
+                        var context = scope.ServiceProvider.GetService<PetShopDbContext>();
 
-                    // new DataInitializer(petRepo, ownerRepo, petTypeRepo).InitData(); 
+                        context.Database.EnsureDeleted();
+                        context.Database.EnsureCreated();
+                        DataInitializer dataInitializer = new DataInitializer(petRepo, petTypeRepo, ownerRepo, colorRepo, petColorRepo, userRepo, authHelp);
+                        dataInitializer.InitData();
+
+                        // new DataInitializer(petRepo, ownerRepo, petTypeRepo).InitData(); 
+
+                    //}
+                    //else
+                    //{
+                    //    var context = scope.ServiceProvider.GetService<PetShopDbContext>();
+                    //    context.Database.EnsureCreated();
+                    //}
+
                 }
-            //}
             app.UseSwaggerUI(c =>
             {
 
